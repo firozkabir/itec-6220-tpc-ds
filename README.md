@@ -1,3 +1,6 @@
+# itec-6220-tpc-ds
+A course project comparing tpc-ds benchmarks against various cloud managed databases
+
 ## About This Repository
 This repository was created to host all the code written for a class project for ITEC-6220. 
 
@@ -39,5 +42,3 @@ dsqgen \
 ```bash
 dsdgen -scale 1 -dir ~/tables
 ```
-
-
