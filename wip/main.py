@@ -5,6 +5,26 @@ import psycopg2
 import os
 
 
+def create_tables():
+    database = os.getenv("tpcdsDatabase")
+    host = os.getenv("tpcdsHost")
+    username = os.getenv("tpcdsUsername")
+    password = os.getenv("tpcdsPassword")
+
+    conn = psycopg2.connect(database=database, host=host,
+                            password=password, user=username)
+    cursor = conn.cursor()
+
+    df = pd.read_csv("create_table.csv")
+    for index, row in df.iterrows():
+        drop_table = f"drop table if exists {row['table']}"
+        create_table = row['ddl'].strip('\"')
+
+        print(f"re-creating table: {row['table']}")
+        cursor.execute(drop_table)
+        cursor.execute(create_table)
+
+
 def remove_trailing_delimiter():
     files = glob.glob("./tables/*.dat")
     sep = "|"
@@ -49,7 +69,8 @@ def load_data():
 
 
 def main():
-    remove_trailing_delimiter()
+    # remove_trailing_delimiter()
+    create_tables()
     load_data()
 
 
