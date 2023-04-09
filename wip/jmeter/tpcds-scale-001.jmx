@@ -12,7 +12,7 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="PostgreSQL Testing" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TPC-DS PowerRun Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -26,138 +26,47 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="databaseUrl" elementType="Argument">
+              <stringProp name="Argument.name">databaseUrl</stringProp>
+              <stringProp name="Argument.value">${__groovy(System.getenv(&apos;tpcdsJdbcString&apos;),)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="databaseUsername" elementType="Argument">
+              <stringProp name="Argument.name">databaseUsername</stringProp>
+              <stringProp name="Argument.value">${__groovy(System.getenv(&apos;tpcdsUsername&apos;),)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="databasePassword" elementType="Argument">
+              <stringProp name="Argument.name">databasePassword</stringProp>
+              <stringProp name="Argument.value">${__groovy(System.getenv(&apos;tpcdsPassword&apos;),)}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
         <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="poolMax">0</stringProp>
+          <stringProp name="timeout">10000</stringProp>
+          <stringProp name="trimInterval">60000</stringProp>
           <boolProp name="autocommit">true</boolProp>
-          <stringProp name="checkQuery"></stringProp>
-          <stringProp name="connectionAge">5000</stringProp>
-          <stringProp name="connectionProperties"></stringProp>
-          <stringProp name="dataSource">testData</stringProp>
-          <stringProp name="dbUrl">jdbc:postgresql://learn-postgresql-01.postgres.database.azure.com/tpcdsdb</stringProp>
-          <stringProp name="driver">org.postgresql.Driver</stringProp>
+          <stringProp name="transactionIsolation">DEFAULT</stringProp>
+          <boolProp name="preinit">false</boolProp>
           <stringProp name="initQuery"></stringProp>
           <boolProp name="keepAlive">true</boolProp>
-          <stringProp name="password">welcomeEIP123$trong</stringProp>
-          <stringProp name="poolMax">0</stringProp>
-          <boolProp name="preinit">false</boolProp>
-          <stringProp name="timeout">10000</stringProp>
-          <stringProp name="transactionIsolation">DEFAULT</stringProp>
-          <stringProp name="trimInterval">60000</stringProp>
-          <stringProp name="username">ssrpdba</stringProp>
+          <stringProp name="connectionAge">5000</stringProp>
+          <stringProp name="checkQuery"></stringProp>
+          <stringProp name="dbUrl">${databaseUrl}</stringProp>
+          <stringProp name="driver">org.postgresql.Driver</stringProp>
+          <stringProp name="username">${databaseUsername}</stringProp>
+          <stringProp name="password">${databasePassword}</stringProp>
+          <stringProp name="connectionProperties"></stringProp>
         </JDBCDataSource>
         <hashTree/>
-        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-warmup-tables" enabled="true">
-          <stringProp name="dataSource">testData</stringProp>
-          <stringProp name="query">select count(*) from call_center;  -- 48
-select count(*) from catalog_page;  -- 36000
-select count(*) from catalog_returns;  -- 432018033
-select count(*) from catalog_sales;  -- 4320078880
-select count(*) from customer;  -- 30000000
-select count(*) from customer_address;  -- 15000000
-select count(*) from customer_demographics;  -- 1920800
-select count(*) from date_dim;  -- 73049
-select count(*) from household_demographics;  -- 7200
-select count(*) from income_band;  -- 20
-select count(*) from inventory;  -- 1033560000
-select count(*) from item;  -- 360000
-select count(*) from promotion;  -- 1800
-select count(*) from reason;  -- 67
-select count(*) from ship_mode;  -- 20
-select count(*) from store;  -- 1350
-select count(*) from store_returns;  -- 863989652
-select count(*) from store_sales;  -- 8639936081
-select count(*) from time_dim;  -- 86400
-select count(*) from warehouse;  -- 22
-select count(*) from web_page;  -- 3600
-select count(*) from web_returns;  -- 216003761
-select count(*) from web_sales;  -- 2159968881
-select count(*) from web_site;  -- 66</stringProp>
-          <stringProp name="queryArguments"></stringProp>
-          <stringProp name="queryArgumentsTypes"></stringProp>
-          <stringProp name="queryTimeout"></stringProp>
-          <stringProp name="queryType">Select Statement</stringProp>
-          <stringProp name="resultSetHandler">Store as String</stringProp>
-          <stringProp name="resultSetMaxRows"></stringProp>
-          <stringProp name="resultVariable"></stringProp>
-          <stringProp name="variableNames"></stringProp>
-        </JDBCSampler>
-        <hashTree>
-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>false</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-                <sentBytes>true</sentBytes>
-                <url>true</url>
-                <threadCounts>true</threadCounts>
-                <idleTime>true</idleTime>
-                <connectTime>true</connectTime>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
-          <hashTree/>
-          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>false</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-                <sentBytes>true</sentBytes>
-                <url>true</url>
-                <threadCounts>true</threadCounts>
-                <idleTime>true</idleTime>
-                <connectTime>true</connectTime>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
-          <hashTree/>
-        </hashTree>
-        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-power-run" enabled="true">
-          <stringProp name="dataSource">testData</stringProp>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-001" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
           <stringProp name="queryType">Select Statement</stringProp>
           <stringProp name="query">-- start template query96.tpl query 1 in stream 0
 select /* TPC-DS query96.tpl 0.1 */  count(*) 
@@ -172,10 +81,22 @@ where ss_sold_time_sk = time_dim.t_time_sk
     and household_demographics.hd_dep_count = 5
     and store.s_store_name = &apos;ese&apos;
 order by count(*)
-limit 100;
+limit 100
 
--- end template query96.tpl query 1 in stream 0
--- start template query7.tpl query 2 in stream 0
+-- end template query96.tpl query 1 in stream 0</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-002" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">-- start template query7.tpl query 2 in stream 0
 select /* TPC-DS query7.tpl 0.2 */  i_item_id, 
         avg(ss_quantity) agg1,
         avg(ss_list_price) agg2,
@@ -193,10 +114,22 @@ select /* TPC-DS query7.tpl 0.2 */  i_item_id,
        d_year = 2001 
  group by i_item_id
  order by i_item_id
- limit 100;
+ limit 100
 
--- end template query7.tpl query 2 in stream 0
--- start template query75.tpl query 3 in stream 0
+-- end template query7.tpl query 2 in stream 0</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-003" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">-- start template query75.tpl query 3 in stream 0
 WITH /* TPC-DS query75.tpl 0.3 */ all_sales AS (
  SELECT d_year
        ,i_brand_id
@@ -263,10 +196,23 @@ WITH /* TPC-DS query75.tpl 0.3 */ all_sales AS (
    AND prev_yr.d_year=2000-1
    AND CAST(curr_yr.sales_cnt AS DECIMAL(17,2))/CAST(prev_yr.sales_cnt AS DECIMAL(17,2))&lt;0.9
  ORDER BY sales_cnt_diff,sales_amt_diff
- limit 100;
+ limit 100
 
 -- end template query75.tpl query 3 in stream 0
--- start template query44.tpl query 4 in stream 0
+</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-004" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">-- start template query44.tpl query 4 in stream 0
 select /* TPC-DS query44.tpl 0.4 */  asceding.rnk, i1.i_product_name best_performing, i2.i_product_name worst_performing
 from(select *
      from (select item_sk,rank() over (order by rank_col asc) rnk
@@ -298,10 +244,22 @@ where asceding.rnk = descending.rnk
   and i1.i_item_sk=asceding.item_sk
   and i2.i_item_sk=descending.item_sk
 order by asceding.rnk
-limit 100;
+limit 100
 
--- end template query44.tpl query 4 in stream 0
--- start template query39.tpl query 5 in stream 0
+-- end template query44.tpl query 4 in stream 0</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-005" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">-- start template query39.tpl query 5 in stream 0
 with /* TPC-DS query39.tpl 0.5 */ inv as
 (select w_warehouse_name,w_warehouse_sk,i_item_sk,d_moy
        ,stdev,mean, case mean when 0 then null else stdev/mean end cov
@@ -326,8 +284,22 @@ where inv1.i_item_sk = inv2.i_item_sk
   and inv2.d_moy=1+1
 order by inv1.w_warehouse_sk,inv1.i_item_sk,inv1.d_moy,inv1.mean,inv1.cov
         ,inv2.d_moy,inv2.mean, inv2.cov
-;
-with /* TPC-DS query39.tpl 0.5 part2 */ inv as
+
+
+-- end template query39.tpl query 5 in stream 0</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-006" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query39.tpl 0.5 part2 */ inv as
 (select w_warehouse_name,w_warehouse_sk,i_item_sk,d_moy
        ,stdev,mean, case mean when 0 then null else stdev/mean end cov
  from(select w_warehouse_name,w_warehouse_sk,i_item_sk,d_moy
@@ -352,11 +324,21 @@ where inv1.i_item_sk = inv2.i_item_sk
   and inv1.cov &gt; 1.5
 order by inv1.w_warehouse_sk,inv1.i_item_sk,inv1.d_moy,inv1.mean,inv1.cov
         ,inv2.d_moy,inv2.mean, inv2.cov
-;
 
--- end template query39.tpl query 5 in stream 0
--- start template query80a.tpl query 6 in stream 0
-with /* TPC-DS query80a.tpl 0.6 */ ssr as
+</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-007" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query80a.tpl 0.6 */ ssr as
  (select  s_store_id as store_id,
           sum(ss_ext_sales_price) as sales,
           sum(coalesce(sr_return_amt, 0)) as returns,
@@ -369,7 +351,7 @@ with /* TPC-DS query80a.tpl 0.6 */ ssr as
      promotion
  where ss_sold_date_sk = d_date_sk
        and d_date between cast(&apos;2002-08-04&apos; as date) 
-                  and dateadd(day,30,cast(&apos;2002-08-04&apos; as date)) 
+                  and (cast(&apos;2002-08-04&apos; as date) + interval &apos;30 day&apos;)
        and ss_store_sk = s_store_sk
        and ss_item_sk = i_item_sk
        and i_current_price &gt; 50
@@ -390,7 +372,7 @@ with /* TPC-DS query80a.tpl 0.6 */ ssr as
      promotion
  where cs_sold_date_sk = d_date_sk
        and d_date between cast(&apos;2002-08-04&apos; as date)
-                  and dateadd(day,30,cast(&apos;2002-08-04&apos; as date))
+                  and  (cast(&apos;2002-08-04&apos; as date) + interval &apos;30 day&apos;)
         and cs_catalog_page_sk = cp_catalog_page_sk
        and cs_item_sk = i_item_sk
        and i_current_price &gt; 50
@@ -411,7 +393,7 @@ group by cp_catalog_page_id)
      promotion
  where ws_sold_date_sk = d_date_sk
        and d_date between cast(&apos;2002-08-04&apos; as date)
-                  and dateadd(day,30,cast(&apos;2002-08-04&apos; as date))
+                  and (cast(&apos;2002-08-04&apos; as date) + interval &apos;30 day&apos;)
         and ws_web_site_sk = web_site_sk
        and ws_item_sk = i_item_sk
        and i_current_price &gt; 50
@@ -462,11 +444,20 @@ results as
    select NULL AS channel, NULL AS id, sum(sales) as sales, sum(returns) as returns, sum(profit) as profit from  results
  ) foo
  order by channel, id
- limit 100;
-
--- end template query80a.tpl query 6 in stream 0
--- start template query32.tpl query 7 in stream 0
-select /* TPC-DS query32.tpl 0.7 */  sum(cs_ext_discount_amt)  as &quot;excess discount amount&quot; 
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-008" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query32.tpl 0.7 */  sum(cs_ext_discount_amt)  as &quot;excess discount amount&quot; 
 from 
    catalog_sales 
    ,item 
@@ -475,7 +466,7 @@ where
 i_manufact_id = 283
 and i_item_sk = cs_item_sk 
 and d_date between &apos;1999-02-22&apos; and 
-        dateadd(day,90,cast(&apos;1999-02-22&apos; as date))
+        (cast(&apos;1999-02-22&apos; as date) + interval &apos;90 day&apos;)
 and d_date_sk = cs_sold_date_sk 
 and cs_ext_discount_amt  
      &gt; ( 
@@ -487,14 +478,23 @@ and cs_ext_discount_amt
          where 
               cs_item_sk = i_item_sk 
           and d_date between &apos;1999-02-22&apos; and
-                             dateadd(day,90,cast(&apos;1999-02-22&apos; as date))
+                             (cast(&apos;1999-02-22&apos; as date) + interval &apos;90 day&apos;)
           and d_date_sk = cs_sold_date_sk 
       ) 
-limit 100;
-
--- end template query32.tpl query 7 in stream 0
--- start template query19.tpl query 8 in stream 0
-select /* TPC-DS query19.tpl 0.8 */  i_brand_id brand_id, i_brand brand, i_manufact_id, i_manufact,
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-009" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query19.tpl 0.8 */  i_brand_id brand_id, i_brand brand, i_manufact_id, i_manufact,
  	sum(ss_ext_sales_price) ext_price
  from date_dim, store_sales, item,customer,customer_address,store
  where d_date_sk = ss_sold_date_sk
@@ -515,11 +515,20 @@ select /* TPC-DS query19.tpl 0.8 */  i_brand_id brand_id, i_brand brand, i_manuf
          ,i_brand_id
          ,i_manufact_id
          ,i_manufact
-limit 100 ;
-
--- end template query19.tpl query 8 in stream 0
--- start template query25.tpl query 9 in stream 0
-select /* TPC-DS query25.tpl 0.9 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-010" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query25.tpl 0.9 */  
  i_item_id
  ,i_item_desc
  ,s_store_id
@@ -563,11 +572,20 @@ select /* TPC-DS query25.tpl 0.9 */
  ,i_item_desc
  ,s_store_id
  ,s_store_name
- limit 100;
-
--- end template query25.tpl query 9 in stream 0
--- start template query78.tpl query 10 in stream 0
-with /* TPC-DS query78.tpl 0.10 */ ws as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-011" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query78.tpl 0.10 */ ws as
   (select d_year AS ws_sold_year, ws_item_sk,
     ws_bill_customer_sk ws_customer_sk,
     sum(ws_quantity) ws_qty,
@@ -621,11 +639,20 @@ order by
   other_chan_wholesale_cost,
   other_chan_sales_price,
   ratio
-limit 100;
-
--- end template query78.tpl query 10 in stream 0
--- start template query86a.tpl query 11 in stream 0
-with /* TPC-DS query86a.tpl 0.11 */ results as
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-012" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query86a.tpl 0.11 */ results as
 ( select sum(ws_net_paid) as total_sum, i_category, i_class, 0 as g_category, 0 as g_class 
  from
     web_sales
@@ -656,11 +683,20 @@ with /* TPC-DS query86a.tpl 0.11 */ results as
    lochierarchy desc,
    case when lochierarchy = 0 then i_category end,
    rank_within_parent 
- limit 100;
-
--- end template query86a.tpl query 11 in stream 0
--- start template query1.tpl query 12 in stream 0
-with /* TPC-DS query1.tpl 0.12 */ customer_total_return as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-013" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query1.tpl 0.12 */ customer_total_return as
 (select sr_customer_sk as ctr_customer_sk
 ,sr_store_sk as ctr_store_sk
 ,sum(SR_RETURN_AMT_INC_TAX) as ctr_total_return
@@ -681,11 +717,20 @@ and s_store_sk = ctr1.ctr_store_sk
 and s_state = &apos;VT&apos;
 and ctr1.ctr_customer_sk = c_customer_sk
 order by c_customer_id
-limit 100;
-
--- end template query1.tpl query 12 in stream 0
--- start template query91.tpl query 13 in stream 0
-select /* TPC-DS query91.tpl 0.13 */ 
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-014" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query91.tpl 0.13 */ 
         cc_call_center_id Call_Center,
         cc_name Call_Center_Name,
         cc_manager Manager,
@@ -712,11 +757,20 @@ and     ( (cd_marital_status       = &apos;M&apos; and cd_education_status     =
 and     hd_buy_potential like &apos;Unknown%&apos;
 and     ca_gmt_offset           = -6
 group by cc_call_center_id,cc_name,cc_manager,cd_marital_status,cd_education_status
-order by sum(cr_net_loss) desc;
-
--- end template query91.tpl query 13 in stream 0
--- start template query21.tpl query 14 in stream 0
-select /* TPC-DS query21.tpl 0.14 */  *
+order by sum(cr_net_loss) desc</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-015" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query21.tpl 0.14 */  *
  from(select w_warehouse_name
             ,i_item_id
             ,sum(case when (cast(d_date as date) &lt; cast (&apos;2000-05-19&apos; as date))
@@ -733,8 +787,8 @@ select /* TPC-DS query21.tpl 0.14 */  *
      and i_item_sk          = inv_item_sk
      and inv_warehouse_sk   = w_warehouse_sk
      and inv_date_sk    = d_date_sk
-     and d_date between dateadd(day,-30,cast (&apos;2000-05-19&apos; as date))
-                    and dateadd(day,30,cast (&apos;2000-05-19&apos; as date))
+     and d_date between (cast(&apos;2000-05-19&apos; as date) + interval &apos;-30 day&apos;)
+                    and (cast(&apos;2000-05-19&apos; as date) + interval &apos;30 day&apos;)
    group by w_warehouse_name, i_item_id) x
  where (case when inv_before &gt; 0 
              then inv_after / inv_before 
@@ -742,11 +796,20 @@ select /* TPC-DS query21.tpl 0.14 */  *
              end) between 2.0/3.0 and 3.0/2.0
  order by w_warehouse_name
          ,i_item_id
- limit 100;
-
--- end template query21.tpl query 14 in stream 0
--- start template query43.tpl query 15 in stream 0
-select /* TPC-DS query43.tpl 0.15 */  s_store_name, s_store_id,
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-016" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query43.tpl 0.15 */  s_store_name, s_store_id,
         sum(case when (d_day_name=&apos;Sunday&apos;) then ss_sales_price else null end) sun_sales,
         sum(case when (d_day_name=&apos;Monday&apos;) then ss_sales_price else null end) mon_sales,
         sum(case when (d_day_name=&apos;Tuesday&apos;) then ss_sales_price else  null end) tue_sales,
@@ -761,11 +824,20 @@ select /* TPC-DS query43.tpl 0.15 */  s_store_name, s_store_id,
        d_year = 2000 
  group by s_store_name, s_store_id
  order by s_store_name, s_store_id,sun_sales,mon_sales,tue_sales,wed_sales,thu_sales,fri_sales,sat_sales
- limit 100;
-
--- end template query43.tpl query 15 in stream 0
--- start template query27a.tpl query 16 in stream 0
-with /* TPC-DS query27a.tpl 0.16 */ results as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-017" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query27a.tpl 0.16 */ results as
  (select i_item_id,
         s_state, 0 as g_state,
         ss_quantity agg1,
@@ -798,11 +870,20 @@ with /* TPC-DS query27a.tpl 0.16 */ results as
          avg(agg4) agg4 from results
         ) foo
   order by i_item_id, s_state
- limit 100;
-
--- end template query27a.tpl query 16 in stream 0
--- start template query94.tpl query 17 in stream 0
-select /* TPC-DS query94.tpl 0.17 */  
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-018" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query94.tpl 0.17 */  
    count(distinct ws_order_number) as &quot;order count&quot;
   ,sum(ws_ext_ship_cost) as &quot;total shipping cost&quot;
   ,sum(ws_net_profit) as &quot;total net profit&quot;
@@ -813,7 +894,7 @@ from
   ,web_site
 where
     d_date between &apos;2000-4-01&apos; and 
-           dateadd(day,60,cast(&apos;2000-4-01&apos; as date))
+           (cast(&apos;2000-4-01&apos; as date) + interval &apos;60 day&apos; )
 and ws1.ws_ship_date_sk = d_date_sk
 and ws1.ws_ship_addr_sk = ca_address_sk
 and ca_state = &apos;ND&apos;
@@ -827,11 +908,20 @@ and not exists(select *
                from web_returns wr1
                where ws1.ws_order_number = wr1.wr_order_number)
 order by count(distinct ws_order_number)
-limit 100;
-
--- end template query94.tpl query 17 in stream 0
--- start template query45.tpl query 18 in stream 0
-select /* TPC-DS query45.tpl 0.18 */ ca_zip, ca_state, sum(ws_sales_price)
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-019" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query45.tpl 0.18 */ ca_zip, ca_state, sum(ws_sales_price)
  from web_sales, customer, customer_address, date_dim, item
  where ws_bill_customer_sk = c_customer_sk
  	and c_current_addr_sk = ca_address_sk 
@@ -847,11 +937,20 @@ select /* TPC-DS query45.tpl 0.18 */ ca_zip, ca_state, sum(ws_sales_price)
  	and d_qoy = 1 and d_year = 2000
  group by ca_zip, ca_state
  order by ca_zip, ca_state
- limit 100;
-
--- end template query45.tpl query 18 in stream 0
--- start template query58.tpl query 19 in stream 0
-with /* TPC-DS query58.tpl 0.19 */ ss_items as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-020" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query58.tpl 0.19 */ ss_items as
  (select i_item_id item_id
         ,sum(ss_ext_sales_price) ss_item_rev 
  from store_sales
@@ -912,11 +1011,20 @@ with /* TPC-DS query58.tpl 0.19 */ ss_items as
    and ws_item_rev between 0.9 * cs_item_rev and 1.1 * cs_item_rev
  order by item_id
          ,ss_item_rev
- limit 100;
-
--- end template query58.tpl query 19 in stream 0
--- start template query64.tpl query 20 in stream 0
-with /* TPC-DS query64.tpl 0.20 */ cs_ui as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-021" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query64.tpl 0.20 */ cs_ui as
  (select cs_item_sk
         ,sum(cs_ext_list_price) as sale,sum(cr_refunded_cash+cr_reversed_charge+cr_store_credit) as refund
   from catalog_sales
@@ -1033,11 +1141,20 @@ order by cs1.product_name
        ,cs1.store_name
        ,cs2.cnt
        ,cs1.s1
-       ,cs2.s1;
-
--- end template query64.tpl query 20 in stream 0
--- start template query36a.tpl query 21 in stream 0
-with /* TPC-DS query36a.tpl 0.21 */ results as
+       ,cs2.s1</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-022" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query36a.tpl 0.21 */ results as
  (select 
     sum(ss_net_profit) as ss_net_profit, sum(ss_ext_sales_price) as ss_ext_sales_price,
     sum(ss_net_profit)/sum(ss_ext_sales_price) as gross_margin
@@ -1075,11 +1192,20 @@ with /* TPC-DS query36a.tpl 0.21 */ results as
    lochierarchy desc
   ,case when lochierarchy = 0 then i_category end
   ,rank_within_parent
-  limit 100;
-
--- end template query36a.tpl query 21 in stream 0
--- start template query33.tpl query 22 in stream 0
-with /* TPC-DS query33.tpl 0.22 */ ss as (
+  limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-023" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query33.tpl 0.22 */ ss as (
  select
           i_manufact_id,sum(ss_ext_sales_price) total_sales
  from
@@ -1150,11 +1276,20 @@ where i_category in (&apos;Jewelry&apos;))
         select * from ws) tmp1
  group by i_manufact_id
  order by total_sales
-limit 100;
-
--- end template query33.tpl query 22 in stream 0
--- start template query46.tpl query 23 in stream 0
-select /* TPC-DS query46.tpl 0.23 */  c_last_name
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-024" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query46.tpl 0.23 */  c_last_name
        ,c_first_name
        ,ca_city
        ,bought_city
@@ -1185,11 +1320,20 @@ select /* TPC-DS query46.tpl 0.23 */  c_last_name
           ,ca_city
           ,bought_city
           ,ss_ticket_number
-  limit 100;
-
--- end template query46.tpl query 23 in stream 0
--- start template query62.tpl query 24 in stream 0
-select /* TPC-DS query62.tpl 0.24 */  
+  limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-025" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query62.tpl 0.24 */  
    substring(w_warehouse_name,1,20)
   ,sm_type
   ,web_name
@@ -1220,11 +1364,20 @@ group by
 order by substring(w_warehouse_name,1,20)
         ,sm_type
        ,web_name
-limit 100;
-
--- end template query62.tpl query 24 in stream 0
--- start template query16.tpl query 25 in stream 0
-select /* TPC-DS query16.tpl 0.25 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-026" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query16.tpl 0.25 */  
    count(distinct cs_order_number) as &quot;order count&quot;
   ,sum(cs_ext_ship_cost) as &quot;total shipping cost&quot;
   ,sum(cs_net_profit) as &quot;total net profit&quot;
@@ -1235,7 +1388,7 @@ from
   ,call_center
 where
     d_date between &apos;2000-2-01&apos; and 
-           dateadd(day, 60, cast(&apos;2000-2-01&apos; as date))
+           ( cast(&apos;2000-2-01&apos; as date) + interval &apos;60 day&apos; )
 and cs1.cs_ship_date_sk = d_date_sk
 and cs1.cs_ship_addr_sk = ca_address_sk
 and ca_state = &apos;AL&apos;
@@ -1251,11 +1404,20 @@ and not exists(select *
                from catalog_returns cr1
                where cs1.cs_order_number = cr1.cr_order_number)
 order by count(distinct cs_order_number)
-limit 100;
-
--- end template query16.tpl query 25 in stream 0
--- start template query10.tpl query 26 in stream 0
-select /* TPC-DS query10.tpl 0.26 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-027" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query10.tpl 0.26 */  
   cd_gender,
   cd_marital_status,
   cd_education_status,
@@ -1310,11 +1472,20 @@ select /* TPC-DS query10.tpl 0.26 */
           cd_dep_count,
           cd_dep_employed_count,
           cd_dep_college_count
-limit 100;
-
--- end template query10.tpl query 26 in stream 0
--- start template query63.tpl query 27 in stream 0
-select /* TPC-DS query63.tpl 0.27 */  * 
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-028" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query63.tpl 0.27 */  * 
 from (select i_manager_id
              ,sum(ss_sales_price) sum_sales
              ,avg(sum(ss_sales_price)) over (partition by i_manager_id) avg_monthly_sales
@@ -1339,11 +1510,20 @@ where case when avg_monthly_sales &gt; 0 then abs (sum_sales - avg_monthly_sales
 order by i_manager_id
         ,avg_monthly_sales
         ,sum_sales
-limit 100;
-
--- end template query63.tpl query 27 in stream 0
--- start template query69.tpl query 28 in stream 0
-select /* TPC-DS query69.tpl 0.28 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-029" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query69.tpl 0.28 */  
   cd_gender,
   cd_marital_status,
   cd_education_status,
@@ -1386,11 +1566,20 @@ select /* TPC-DS query69.tpl 0.28 */
           cd_education_status,
           cd_purchase_estimate,
           cd_credit_rating
- limit 100;
-
--- end template query69.tpl query 28 in stream 0
--- start template query60.tpl query 29 in stream 0
-with /* TPC-DS query60.tpl 0.29 */ ss as (
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-030" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query60.tpl 0.29 */ ss as (
  select
           i_item_id,sum(ss_ext_sales_price) total_sales
  from
@@ -1464,11 +1653,20 @@ where i_category in (&apos;Music&apos;))
  group by i_item_id
  order by i_item_id
       ,total_sales
- limit 100;
-
--- end template query60.tpl query 29 in stream 0
--- start template query59.tpl query 30 in stream 0
-with /* TPC-DS query59.tpl 0.30 */ wss as 
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-031" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query59.tpl 0.30 */ wss as 
  (select d_week_seq,
         ss_store_sk,
         sum(case when (d_day_name=&apos;Sunday&apos;) then ss_sales_price else null end) sun_sales,
@@ -1508,28 +1706,46 @@ with /* TPC-DS query59.tpl 0.30 */ wss as
  where s_store_id1=s_store_id2
    and d_week_seq1=d_week_seq2-52
  order by s_store_name1,s_store_id1,d_week_seq1
-limit 100;
-
--- end template query59.tpl query 30 in stream 0
--- start template query37.tpl query 31 in stream 0
-select /* TPC-DS query37.tpl 0.31 */  i_item_id
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-032" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query37.tpl 0.31 */  i_item_id
        ,i_item_desc
        ,i_current_price
  from item, inventory, date_dim, catalog_sales
  where i_current_price between 24 and 24 + 30
  and inv_item_sk = i_item_sk
  and d_date_sk=inv_date_sk
- and d_date between cast(&apos;2002-06-22&apos; as date) and dateadd(day,60,cast(&apos;2002-06-22&apos; as date))
+ and d_date between cast(&apos;2002-06-22&apos; as date) and (cast(&apos;2002-06-22&apos; as date) + interval &apos;60 day&apos;)
  and i_manufact_id in (951,717,692,953)
  and inv_quantity_on_hand between 100 and 500
  and cs_item_sk = i_item_sk
  group by i_item_id,i_item_desc,i_current_price
  order by i_item_id
- limit 100;
-
--- end template query37.tpl query 31 in stream 0
--- start template query98.tpl query 32 in stream 0
-select /* TPC-DS query98.tpl 0.32 */ i_item_id
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-033" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query98.tpl 0.32 */ i_item_id
       ,i_item_desc 
       ,i_category 
       ,i_class 
@@ -1546,7 +1762,7 @@ where
   	and i_category in (&apos;Men&apos;, &apos;Music&apos;, &apos;Shoes&apos;)
   	and ss_sold_date_sk = d_date_sk
 	and d_date between cast(&apos;2001-03-17&apos; as date) 
-				and dateadd(day,30,cast(&apos;2001-03-17&apos; as date))
+				and (cast(&apos;2001-03-17&apos; as date) + interval &apos;30 day&apos;)
 group by 
 	i_item_id
         ,i_item_desc 
@@ -1558,11 +1774,20 @@ order by
         ,i_class
         ,i_item_id
         ,i_item_desc
-        ,revenueratio;
-
--- end template query98.tpl query 32 in stream 0
--- start template query85.tpl query 33 in stream 0
-select /* TPC-DS query85.tpl 0.33 */  substring(r_reason_desc,1,20)
+        ,revenueratio</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-034" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query85.tpl 0.33 */  substring(r_reason_desc,1,20)
        ,avg(ws_quantity)
        ,avg(wr_refunded_cash)
        ,avg(wr_fee)
@@ -1642,11 +1867,20 @@ order by substring(r_reason_desc,1,20)
         ,avg(ws_quantity)
         ,avg(wr_refunded_cash)
         ,avg(wr_fee)
-limit 100;
-
--- end template query85.tpl query 33 in stream 0
--- start template query70a.tpl query 34 in stream 0
-with /* TPC-DS query70a.tpl 0.34 */ results as
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-035" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query70a.tpl 0.34 */ results as
 ( select
     sum(ss_net_profit) as total_sum ,s_state ,s_county, 0 as gstate, 0 as g_county
  from
@@ -1685,11 +1919,20 @@ with /* TPC-DS query70a.tpl 0.34 */ results as
   lochierarchy desc
   ,case when lochierarchy = 0 then s_state end
   ,rank_within_parent
- limit 100;
-
--- end template query70a.tpl query 34 in stream 0
--- start template query67a.tpl query 35 in stream 0
-with /* TPC-DS query67a.tpl 0.35 */ results as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-036" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query67a.tpl 0.35 */ results as
 (     select i_category ,i_class ,i_brand ,i_product_name ,d_year ,d_qoy ,d_moy ,s_store_id
                   ,sum(coalesce(ss_sales_price*ss_quantity,0)) sumsales
             from store_sales ,date_dim ,store ,item
@@ -1757,11 +2000,20 @@ order by i_category
         ,s_store_id
         ,sumsales
         ,rk
-limit 100;
-
--- end template query67a.tpl query 35 in stream 0
--- start template query28.tpl query 36 in stream 0
-select /* TPC-DS query28.tpl 0.36 */  *
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-037" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query28.tpl 0.36 */  *
 from (select avg(ss_list_price) B1_LP
             ,count(ss_list_price) B1_CNT
             ,count(distinct ss_list_price) B1_CNTD
@@ -1810,11 +2062,20 @@ from (select avg(ss_list_price) B1_LP
         and (ss_list_price between 64 and 64+10
           or ss_coupon_amt between 2991 and 2991+1000
           or ss_wholesale_cost between 7 and 7+20)) B6
-limit 100;
-
--- end template query28.tpl query 36 in stream 0
--- start template query81.tpl query 37 in stream 0
-with /* TPC-DS query81.tpl 0.37 */ customer_total_return as
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-038" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query81.tpl 0.37 */ customer_total_return as
  (select cr_returning_customer_sk as ctr_customer_sk
         ,ca_state as ctr_state, 
  	sum(cr_return_amt_inc_tax) as ctr_total_return
@@ -1841,11 +2102,20 @@ with /* TPC-DS query81.tpl 0.37 */ customer_total_return as
  order by c_customer_id,c_salutation,c_first_name,c_last_name,ca_street_number,ca_street_name
                    ,ca_street_type,ca_suite_number,ca_city,ca_county,ca_state,ca_zip,ca_country,ca_gmt_offset
                   ,ca_location_type,ctr_total_return
- limit 100;
-
--- end template query81.tpl query 37 in stream 0
--- start template query97.tpl query 38 in stream 0
-with /* TPC-DS query97.tpl 0.38 */ ssci as (
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-039" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query97.tpl 0.38 */ ssci as (
 select ss_customer_sk customer_sk
       ,ss_item_sk item_sk
 from store_sales,date_dim
@@ -1866,11 +2136,20 @@ group by cs_bill_customer_sk
       ,sum(case when ssci.customer_sk is not null and csci.customer_sk is not null then 1 else 0 end) store_and_catalog
 from ssci full outer join csci on (ssci.customer_sk=csci.customer_sk
                                and ssci.item_sk = csci.item_sk)
-limit 100;
-
--- end template query97.tpl query 38 in stream 0
--- start template query66.tpl query 39 in stream 0
-select /* TPC-DS query66.tpl 0.39 */   
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-040" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query66.tpl 0.39 */   
          w_warehouse_name
  	,w_warehouse_sq_ft
  	,w_city
@@ -2086,11 +2365,20 @@ select /* TPC-DS query66.tpl 0.39 */
  	,ship_carriers
        ,year
  order by w_warehouse_name
- limit 100;
-
--- end template query66.tpl query 39 in stream 0
--- start template query90.tpl query 40 in stream 0
-select /* TPC-DS query90.tpl 0.40 */  cast(amc as decimal(15,4))/cast(pmc as decimal(15,4)) am_pm_ratio
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-041" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query90.tpl 0.40 */  cast(amc as decimal(15,4))/cast(pmc as decimal(15,4)) am_pm_ratio
  from ( select count(*) amc
        from web_sales, household_demographics , time_dim, web_page
        where ws_sold_time_sk = time_dim.t_time_sk
@@ -2108,11 +2396,20 @@ select /* TPC-DS query90.tpl 0.40 */  cast(amc as decimal(15,4))/cast(pmc as dec
          and household_demographics.hd_dep_count = 9
          and web_page.wp_char_count between 5000 and 5200) pt
  order by am_pm_ratio
- limit 100;
-
--- end template query90.tpl query 40 in stream 0
--- start template query17.tpl query 41 in stream 0
-select /* TPC-DS query17.tpl 0.41 */  i_item_id
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-042" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query17.tpl 0.41 */  i_item_id
        ,i_item_desc
        ,s_state
        ,count(ss_quantity) as store_sales_quantitycount
@@ -2153,11 +2450,20 @@ select /* TPC-DS query17.tpl 0.41 */  i_item_id
  order by i_item_id
          ,i_item_desc
          ,s_state
-limit 100;
-
--- end template query17.tpl query 41 in stream 0
--- start template query47.tpl query 42 in stream 0
-with /* TPC-DS query47.tpl 0.42 */ v1 as(
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-043" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query47.tpl 0.42 */ v1 as(
  select i_category, i_brand,
         s_store_name, s_company_name,
         d_year, d_moy,
@@ -2204,11 +2510,20 @@ with /* TPC-DS query47.tpl 0.42 */ v1 as(
         avg_monthly_sales &gt; 0 and
         case when avg_monthly_sales &gt; 0 then abs(sum_sales - avg_monthly_sales) / avg_monthly_sales else null end &gt; 0.1
  order by sum_sales - avg_monthly_sales, sum_sales
- limit 100;
-
--- end template query47.tpl query 42 in stream 0
--- start template query95.tpl query 43 in stream 0
-with /* TPC-DS query95.tpl 0.43 */ ws_wh as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-044" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query95.tpl 0.43 */ ws_wh as
 (select ws1.ws_order_number,ws1.ws_warehouse_sk wh1,ws2.ws_warehouse_sk wh2
  from web_sales ws1,web_sales ws2
  where ws1.ws_order_number = ws2.ws_order_number
@@ -2223,8 +2538,7 @@ from
   ,customer_address
   ,web_site
 where
-    d_date between &apos;2002-3-01&apos; and 
-           dateadd(day,60,cast(&apos;2002-3-01&apos; as date))
+    d_date between &apos;2002-3-01&apos; and (cast(&apos;2002-3-01&apos; as date) + interval &apos;60 day&apos;)
 and ws1.ws_ship_date_sk = d_date_sk
 and ws1.ws_ship_addr_sk = ca_address_sk
 and ca_state = &apos;IA&apos;
@@ -2236,11 +2550,20 @@ and ws1.ws_order_number in (select wr_order_number
                             from web_returns,ws_wh
                             where wr_order_number = ws_wh.ws_order_number)
 order by count(distinct ws_order_number)
-limit 100;
-
--- end template query95.tpl query 43 in stream 0
--- start template query92.tpl query 44 in stream 0
-select /* TPC-DS query92.tpl 0.44 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-045" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query92.tpl 0.44 */  
    sum(ws_ext_discount_amt)  as &quot;Excess Discount Amount&quot; 
 from 
     web_sales 
@@ -2249,8 +2572,7 @@ from
 where
 i_manufact_id = 992
 and i_item_sk = ws_item_sk 
-and d_date between &apos;1998-02-02&apos; and 
-        dateadd(day,90,cast(&apos;1998-02-02&apos; as date))
+and d_date between &apos;1998-02-02&apos; and (cast(&apos;1998-02-02&apos; as date) + interval &apos;90 day&apos;)
 and d_date_sk = ws_sold_date_sk 
 and ws_ext_discount_amt  
      &gt; ( 
@@ -2261,16 +2583,24 @@ and ws_ext_discount_amt
            ,date_dim
          WHERE 
               ws_item_sk = i_item_sk 
-          and d_date between &apos;1998-02-02&apos; and
-                             dateadd(day,90,cast(&apos;1998-02-02&apos; as date))
+          and d_date between &apos;1998-02-02&apos; and (cast(&apos;1998-02-02&apos; as date) + interval &apos;90 day&apos;)
           and d_date_sk = ws_sold_date_sk 
       ) 
 order by sum(ws_ext_discount_amt)
-limit 100;
-
--- end template query92.tpl query 44 in stream 0
--- start template query3.tpl query 45 in stream 0
-select /* TPC-DS query3.tpl 0.45 */  dt.d_year 
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-046" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query3.tpl 0.45 */  dt.d_year 
        ,item.i_brand_id brand_id 
        ,item.i_brand brand
        ,sum(ss_sales_price) sum_agg
@@ -2287,11 +2617,20 @@ select /* TPC-DS query3.tpl 0.45 */  dt.d_year
  order by dt.d_year
          ,sum_agg desc
          ,brand_id
- limit 100;
-
--- end template query3.tpl query 45 in stream 0
--- start template query51.tpl query 46 in stream 0
-WITH /* TPC-DS query51.tpl 0.46 */ web_v1 as (
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-047" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">WITH /* TPC-DS query51.tpl 0.46 */ web_v1 as (
 select
   ws_item_sk item_sk, d_date,
   sum(sum(ws_sales_price))
@@ -2332,11 +2671,20 @@ from (select item_sk
 where web_cumulative &gt; store_cumulative
 order by item_sk
         ,d_date
-limit 100;
-
--- end template query51.tpl query 46 in stream 0
--- start template query35a.tpl query 47 in stream 0
-select /* TPC-DS query35a.tpl 0.47 */   
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-048" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query35a.tpl 0.47 */   
   ca_state,
   cd_gender,
   cd_marital_status,
@@ -2393,11 +2741,20 @@ select /* TPC-DS query35a.tpl 0.47 */
           cd_dep_count,
           cd_dep_employed_count,
           cd_dep_college_count
- limit 100;
-
--- end template query35a.tpl query 47 in stream 0
--- start template query49.tpl query 48 in stream 0
-select /* TPC-DS query49.tpl 0.48 */  channel, item, return_ratio, return_rank, currency_rank from
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-049" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query49.tpl 0.48 */  channel, item, return_ratio, return_rank, currency_rank from
  (select
  &apos;web&apos; as channel
  ,web.item
@@ -2421,7 +2778,7 @@ select /* TPC-DS query49.tpl 0.48 */  channel, item, return_ratio, return_rank, 
  		 web_sales ws left outer join web_returns wr 
  			on (ws.ws_order_number = wr.wr_order_number and 
  			ws.ws_item_sk = wr.wr_item_sk)
-                 ,date_dim
+                 ,date_dim 
  		where 
  			wr.wr_return_amt &gt; 10000 
  			and ws.ws_net_profit &gt; 1
@@ -2520,13 +2877,22 @@ select /* TPC-DS query49.tpl 0.48 */  channel, item, return_ratio, return_rank, 
  or 
  store.currency_rank &lt;= 10
  )
- )
+ ) as m
  order by 1,4,5,2
- limit 100;
-
--- end template query49.tpl query 48 in stream 0
--- start template query9.tpl query 49 in stream 0
-select /* TPC-DS query9.tpl 0.49 */ case when (select count(*) 
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-050" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query9.tpl 0.49 */ case when (select count(*) 
                   from store_sales 
                   where ss_quantity between 1 and 20) &gt; 12171089
             then (select avg(ss_ext_tax) 
@@ -2572,12 +2938,20 @@ select /* TPC-DS query9.tpl 0.49 */ case when (select count(*)
                   from store_sales
                   where ss_quantity between 81 and 100) end bucket5
 from reason
-where r_reason_sk = 1
-;
-
--- end template query9.tpl query 49 in stream 0
--- start template query31.tpl query 50 in stream 0
-with /* TPC-DS query31.tpl 0.50 */ ss as
+where r_reason_sk = 1</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-051" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query31.tpl 0.50 */ ss as
  (select ca_county,d_qoy, d_year,sum(ss_ext_sales_price) as store_sales
  from store_sales,date_dim,customer_address
  where ss_sold_date_sk = d_date_sk
@@ -2625,11 +2999,20 @@ with /* TPC-DS query31.tpl 0.50 */ ss as
        &gt; case when ss1.store_sales &gt; 0 then ss2.store_sales/ss1.store_sales else null end
     and case when ws2.web_sales &gt; 0 then ws3.web_sales/ws2.web_sales else null end
        &gt; case when ss2.store_sales &gt; 0 then ss3.store_sales/ss2.store_sales else null end
- order by web_q1_q2_increase;
-
--- end template query31.tpl query 50 in stream 0
--- start template query11.tpl query 51 in stream 0
-with /* TPC-DS query11.tpl 0.51 */ year_total as (
+ order by web_q1_q2_increase</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-052" enabled="false">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query11.tpl 0.51 */ year_total as (
  select c_customer_id customer_id
        ,c_first_name customer_first_name
        ,c_last_name customer_last_name
@@ -2706,11 +3089,20 @@ with /* TPC-DS query11.tpl 0.51 */ year_total as (
          ,t_s_secyear.customer_first_name
          ,t_s_secyear.customer_last_name
          ,t_s_secyear.customer_email_address
-limit 100;
-
--- end template query11.tpl query 51 in stream 0
--- start template query93.tpl query 52 in stream 0
-select /* TPC-DS query93.tpl 0.52 */  ss_customer_sk
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-053" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query93.tpl 0.52 */  ss_customer_sk
             ,sum(act_sales) sumsales
       from (select ss_item_sk
                   ,ss_ticket_number
@@ -2724,11 +3116,20 @@ select /* TPC-DS query93.tpl 0.52 */  ss_customer_sk
               and r_reason_desc = &apos;No service location in my area&apos;) t
       group by ss_customer_sk
       order by sumsales, ss_customer_sk
-limit 100;
-
--- end template query93.tpl query 52 in stream 0
--- start template query29.tpl query 53 in stream 0
-select /* TPC-DS query29.tpl 0.53 */   
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-054" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query29.tpl 0.53 */   
      i_item_id
     ,i_item_desc
     ,s_store_id
@@ -2771,11 +3172,20 @@ select /* TPC-DS query29.tpl 0.53 */
    ,i_item_desc
    ,s_store_id
    ,s_store_name
- limit 100;
-
--- end template query29.tpl query 53 in stream 0
--- start template query38.tpl query 54 in stream 0
-select /* TPC-DS query38.tpl 0.54 */  count(*) from (
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-055" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query38.tpl 0.54 */  count(*) from (
     select distinct c_last_name, c_first_name, d_date
     from store_sales, date_dim, customer
           where store_sales.ss_sold_date_sk = date_dim.d_date_sk
@@ -2794,11 +3204,20 @@ select /* TPC-DS query38.tpl 0.54 */  count(*) from (
       and web_sales.ws_bill_customer_sk = customer.c_customer_sk
       and d_month_seq between 1190 and 1190 + 11
 ) hot_cust
-limit 100;
-
--- end template query38.tpl query 54 in stream 0
--- start template query22a.tpl query 55 in stream 0
-with /* TPC-DS query22a.tpl 0.55 */ results as 
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-056" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query22a.tpl 0.55 */ results as 
 (select  i_product_name
              ,i_brand
              ,i_class
@@ -2835,11 +3254,20 @@ from results)
  select  i_product_name, i_brand, i_class, i_category,qoh
       from results_rollup
       order by qoh, i_product_name, i_brand, i_class, i_category
-limit 100;
-
--- end template query22a.tpl query 55 in stream 0
--- start template query89.tpl query 56 in stream 0
-select /* TPC-DS query89.tpl 0.56 */  *
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-057" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query89.tpl 0.56 */  *
 from(
 select i_category, i_class, i_brand,
        s_store_name, s_company_name,
@@ -2863,11 +3291,20 @@ group by i_category, i_class, i_brand,
          s_store_name, s_company_name, d_moy) tmp1
 where case when (avg_monthly_sales &lt;&gt; 0) then (abs(sum_sales - avg_monthly_sales) / avg_monthly_sales) else null end &gt; 0.1
 order by sum_sales - avg_monthly_sales, s_store_name
-limit 100;
-
--- end template query89.tpl query 56 in stream 0
--- start template query15.tpl query 57 in stream 0
-select /* TPC-DS query15.tpl 0.57 */  ca_zip
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-059" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query15.tpl 0.57 */  ca_zip
        ,sum(cs_sales_price)
  from catalog_sales
      ,customer
@@ -2883,11 +3320,20 @@ select /* TPC-DS query15.tpl 0.57 */  ca_zip
  	and d_qoy = 1 and d_year = 2002
  group by ca_zip
  order by ca_zip
- limit 100;
-
--- end template query15.tpl query 57 in stream 0
--- start template query6.tpl query 58 in stream 0
-select /* TPC-DS query6.tpl 0.58 */  a.ca_state state, count(*) cnt
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-060" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query6.tpl 0.58 */  a.ca_state state, count(*) cnt
  from customer_address a
      ,customer c
      ,store_sales s
@@ -2909,11 +3355,20 @@ select /* TPC-DS query6.tpl 0.58 */  a.ca_state state, count(*) cnt
  group by a.ca_state
  having count(*) &gt;= 10
  order by cnt, a.ca_state 
- limit 100;
-
--- end template query6.tpl query 58 in stream 0
--- start template query52.tpl query 59 in stream 0
-select /* TPC-DS query52.tpl 0.59 */  dt.d_year
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-061" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query52.tpl 0.59 */  dt.d_year
  	,item.i_brand_id brand_id
  	,item.i_brand brand
  	,sum(ss_ext_sales_price) ext_price
@@ -2931,11 +3386,20 @@ select /* TPC-DS query52.tpl 0.59 */  dt.d_year
  order by dt.d_year
  	,ext_price desc
  	,brand_id
-limit 100 ;
-
--- end template query52.tpl query 59 in stream 0
--- start template query50.tpl query 60 in stream 0
-select /* TPC-DS query50.tpl 0.60 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-062" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query50.tpl 0.60 */  
    s_store_name
   ,s_company_id
   ,s_street_number
@@ -2990,11 +3454,20 @@ order by s_store_name
         ,s_county
         ,s_state
         ,s_zip
-limit 100;
-
--- end template query50.tpl query 60 in stream 0
--- start template query42.tpl query 61 in stream 0
-select /* TPC-DS query42.tpl 0.61 */  dt.d_year
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-063" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query42.tpl 0.61 */  dt.d_year
  	,item.i_category_id
  	,item.i_category
  	,sum(ss_ext_sales_price)
@@ -3012,11 +3485,20 @@ select /* TPC-DS query42.tpl 0.61 */  dt.d_year
  order by       sum(ss_ext_sales_price) desc,dt.d_year
  		,item.i_category_id
  		,item.i_category
-limit 100 ;
-
--- end template query42.tpl query 61 in stream 0
--- start template query41.tpl query 62 in stream 0
-select /* TPC-DS query41.tpl 0.62 */  distinct(i_product_name)
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-064" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query41.tpl 0.62 */  distinct(i_product_name)
  from item i1
  where i_manufact_id between 744 and 744+40 
    and (select count(*) as item_cnt
@@ -3064,11 +3546,20 @@ select /* TPC-DS query41.tpl 0.62 */  distinct(i_product_name)
         (i_size = &apos;large&apos; or i_size = &apos;medium&apos;)
         )))) &gt; 0
  order by i_product_name
- limit 100;
-
--- end template query41.tpl query 62 in stream 0
--- start template query8.tpl query 63 in stream 0
-select /* TPC-DS query8.tpl 0.63 */  s_store_name
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-065" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query8.tpl 0.63 */  s_store_name
       ,sum(ss_net_profit)
  from store_sales
      ,date_dim
@@ -3172,11 +3663,20 @@ select /* TPC-DS query8.tpl 0.63 */  s_store_name
   and (substring(s_zip,1,2) = substring(V1.ca_zip,1,2))
  group by s_store_name
  order by s_store_name
- limit 100;
-
--- end template query8.tpl query 63 in stream 0
--- start template query12.tpl query 64 in stream 0
-select /* TPC-DS query12.tpl 0.64 */  i_item_id
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-066" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query12.tpl 0.64 */  i_item_id
       ,i_item_desc 
       ,i_category 
       ,i_class 
@@ -3193,7 +3693,7 @@ where
   	and i_category in (&apos;Electronics&apos;, &apos;Shoes&apos;, &apos;Jewelry&apos;)
   	and ws_sold_date_sk = d_date_sk
 	and d_date between cast(&apos;2001-06-29&apos; as date) 
-				and dateadd(day,30,cast(&apos;2001-06-29&apos; as date))
+				and (cast(&apos;2001-06-29&apos; as date) + interval &apos;30 day&apos;)
 group by 
 	i_item_id
         ,i_item_desc 
@@ -3206,11 +3706,20 @@ order by
         ,i_item_id
         ,i_item_desc
         ,revenueratio
-limit 100;
-
--- end template query12.tpl query 64 in stream 0
--- start template query20.tpl query 65 in stream 0
-select /* TPC-DS query20.tpl 0.65 */  i_item_id
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-067" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query20.tpl 0.65 */  i_item_id
        ,i_item_desc 
        ,i_category 
        ,i_class 
@@ -3225,7 +3734,7 @@ select /* TPC-DS query20.tpl 0.65 */  i_item_id
    and i_category in (&apos;Shoes&apos;, &apos;Sports&apos;, &apos;Electronics&apos;)
    and cs_sold_date_sk = d_date_sk
  and d_date between cast(&apos;1998-05-13&apos; as date) 
- 				and dateadd(day,30,cast(&apos;1998-05-13&apos; as date))
+ 				and (cast(&apos;1998-05-13&apos; as date)+interval &apos;30 day&apos;)
  group by i_item_id
          ,i_item_desc 
          ,i_category
@@ -3236,11 +3745,20 @@ select /* TPC-DS query20.tpl 0.65 */  i_item_id
          ,i_item_id
          ,i_item_desc
          ,revenueratio
-limit 100;
-
--- end template query20.tpl query 65 in stream 0
--- start template query88.tpl query 66 in stream 0
-select  /* TPC-DS query88.tpl 0.66 */ *
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-068" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select  /* TPC-DS query88.tpl 0.66 */ *
 from
  (select count(*) h8_30_to_9
  from store_sales, household_demographics , time_dim, store
@@ -3329,29 +3847,148 @@ from
      and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
           (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
           (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
-     and store.s_store_name = &apos;ese&apos;) s8
-;
-
--- end template query88.tpl query 66 in stream 0
--- start template query82.tpl query 67 in stream 0
-select /* TPC-DS query82.tpl 0.67 */  i_item_id
+     and store.s_store_name = &apos;ese&apos;) s8</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-068-b" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select  /* TPC-DS query88.tpl 0.66 */ *
+from
+ (select count(*) h8_30_to_9
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk   
+     and ss_hdemo_sk = household_demographics.hd_demo_sk 
+     and ss_store_sk = s_store_sk
+     and time_dim.t_hour = 8
+     and time_dim.t_minute &gt;= 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2)) 
+     and store.s_store_name = &apos;ese&apos;) s1,
+ (select count(*) h9_to_9_30 
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk 
+     and time_dim.t_hour = 9 
+     and time_dim.t_minute &lt; 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s2,
+ (select count(*) h9_30_to_10 
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk
+     and time_dim.t_hour = 9
+     and time_dim.t_minute &gt;= 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s3,
+ (select count(*) h10_to_10_30
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk
+     and time_dim.t_hour = 10 
+     and time_dim.t_minute &lt; 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s4,
+ (select count(*) h10_30_to_11
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk
+     and time_dim.t_hour = 10 
+     and time_dim.t_minute &gt;= 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s5,
+ (select count(*) h11_to_11_30
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk 
+     and time_dim.t_hour = 11
+     and time_dim.t_minute &lt; 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s6,
+ (select count(*) h11_30_to_12
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk
+     and time_dim.t_hour = 11
+     and time_dim.t_minute &gt;= 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s7,
+ (select count(*) h12_to_12_30
+ from store_sales, household_demographics , time_dim, store
+ where ss_sold_time_sk = time_dim.t_time_sk
+     and ss_hdemo_sk = household_demographics.hd_demo_sk
+     and ss_store_sk = s_store_sk
+     and time_dim.t_hour = 12
+     and time_dim.t_minute &lt; 30
+     and ((household_demographics.hd_dep_count = 0 and household_demographics.hd_vehicle_count&lt;=0+2) or
+          (household_demographics.hd_dep_count = 2 and household_demographics.hd_vehicle_count&lt;=2+2) or
+          (household_demographics.hd_dep_count = 4 and household_demographics.hd_vehicle_count&lt;=4+2))
+     and store.s_store_name = &apos;ese&apos;) s8</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-069" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query82.tpl 0.67 */  i_item_id
        ,i_item_desc
        ,i_current_price
  from item, inventory, date_dim, store_sales
  where i_current_price between 12 and 12+30
  and inv_item_sk = i_item_sk
  and d_date_sk=inv_date_sk
- and d_date between cast(&apos;2002-04-05&apos; as date) and dateadd(day,60,cast(&apos;2002-04-05&apos; as date))
+ and d_date between cast(&apos;2002-04-05&apos; as date) and (cast(&apos;2002-04-05&apos; as date) + interval &apos;day 60&apos;)
  and i_manufact_id in (400,448,910,149)
  and inv_quantity_on_hand between 100 and 500
  and ss_item_sk = i_item_sk
  group by i_item_id,i_item_desc,i_current_price
  order by i_item_id
- limit 100;
-
--- end template query82.tpl query 67 in stream 0
--- start template query23.tpl query 68 in stream 0
-with /* TPC-DS query23.tpl 0.68 */ frequent_ss_items as 
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-070" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query23.tpl 0.68 */ frequent_ss_items as 
  (select substring(i_item_desc,1,30) itemdesc,i_item_sk item_sk,d_date solddate,count(*) cnt
   from store_sales
       ,date_dim 
@@ -3370,7 +4007,7 @@ with /* TPC-DS query23.tpl 0.68 */ frequent_ss_items as
         where ss_customer_sk = c_customer_sk
          and ss_sold_date_sk = d_date_sk
          and d_year in (1998,1998+1,1998+2,1998+3) 
-        group by c_customer_sk)),
+        group by c_customer_sk) as x ),
  best_ss_customer as
  (select c_customer_sk,sum(ss_quantity*ss_sales_price) ssales
   from store_sales
@@ -3398,9 +4035,21 @@ from
          and d_moy = 4 
          and ws_sold_date_sk = d_date_sk 
          and ws_item_sk in (select item_sk from frequent_ss_items)
-         and ws_bill_customer_sk in (select c_customer_sk from best_ss_customer)) 
- limit 100;
-with /* TPC-DS query23.tpl 0.68 part2 */ frequent_ss_items as
+         and ws_bill_customer_sk in (select c_customer_sk from best_ss_customer)) as x2
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-071" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query23.tpl 0.68 part2 */ frequent_ss_items as
  (select substring(i_item_desc,1,30) itemdesc,i_item_sk item_sk,d_date solddate,count(*) cnt
   from store_sales
       ,date_dim
@@ -3419,7 +4068,7 @@ with /* TPC-DS query23.tpl 0.68 part2 */ frequent_ss_items as
         where ss_customer_sk = c_customer_sk
          and ss_sold_date_sk = d_date_sk
          and d_year in (1998,1998+1,1998+2,1998+3)
-        group by c_customer_sk)),
+        group by c_customer_sk) as x ),
  best_ss_customer as
  (select c_customer_sk,sum(ss_quantity*ss_sales_price) ssales
   from store_sales
@@ -3452,13 +4101,22 @@ with /* TPC-DS query23.tpl 0.68 part2 */ frequent_ss_items as
          and ws_item_sk in (select item_sk from frequent_ss_items)
          and ws_bill_customer_sk in (select c_customer_sk from best_ss_customer)
          and ws_bill_customer_sk = c_customer_sk
-       group by c_last_name,c_first_name) 
+       group by c_last_name,c_first_name) as x2
      order by c_last_name,c_first_name,sales
-  limit 100;
-
--- end template query23.tpl query 68 in stream 0
--- start template query14a.tpl query 69 in stream 0
-with  /* TPC-DS query14a.tpl 0.69 */ cross_items as
+  limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-072" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with  /* TPC-DS query14a.tpl 0.69 */ cross_items as
  (select i_item_sk ss_item_sk
  from item,
  (select iss.i_brand_id brand_id
@@ -3575,8 +4233,20 @@ from (
       union
       select null as channel, null as i_brand_id, null as i_class_id, null as i_category_id, sum(sum_sales), sum(number_sales) from results) z
 order by channel, i_brand_id, i_class_id, i_category_id
- limit 100;
-with  /* TPC-DS query14a.tpl 0.69 part2 */ cross_items as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-073" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with  /* TPC-DS query14a.tpl 0.69 part2 */ cross_items as
  (select i_item_sk ss_item_sk
  from item,
  (select iss.i_brand_id brand_id
@@ -3681,11 +4351,20 @@ from
    and this_year.i_class_id = last_year.i_class_id
    and this_year.i_category_id = last_year.i_category_id
  order by this_year.channel, this_year.i_brand_id, this_year.i_class_id, this_year.i_category_id
- limit 100;
-
--- end template query14a.tpl query 69 in stream 0
--- start template query57.tpl query 70 in stream 0
-with /* TPC-DS query57.tpl 0.70 */ v1 as(
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-074" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query57.tpl 0.70 */ v1 as(
  select i_category, i_brand,
         cc_name,
         d_year, d_moy,
@@ -3729,11 +4408,20 @@ with /* TPC-DS query57.tpl 0.70 */ v1 as(
         avg_monthly_sales &gt; 0 and
         case when avg_monthly_sales &gt; 0 then abs(sum_sales - avg_monthly_sales) / avg_monthly_sales else null end &gt; 0.1
  order by sum_sales - avg_monthly_sales, psum
- limit 100;
-
--- end template query57.tpl query 70 in stream 0
--- start template query65.tpl query 71 in stream 0
-select /* TPC-DS query65.tpl 0.71 */ 
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-075" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query65.tpl 0.71 */ 
 	s_store_name,
 	i_item_desc,
 	sc.revenue,
@@ -3758,11 +4446,20 @@ select /* TPC-DS query65.tpl 0.71 */
        s_store_sk = sc.ss_store_sk and
        i_item_sk = sc.ss_item_sk
  order by s_store_name, i_item_desc
-limit 100;
-
--- end template query65.tpl query 71 in stream 0
--- start template query71.tpl query 72 in stream 0
-select /* TPC-DS query71.tpl 0.72 */ i_brand_id brand_id, i_brand brand,t_hour,t_minute,
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-076" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query71.tpl 0.72 */ i_brand_id brand_id, i_brand brand,t_hour,t_minute,
  	sum(ext_price) ext_price
  from item, (select ws_ext_sales_price as ext_price, 
                         ws_sold_date_sk as sold_date_sk,
@@ -3797,12 +4494,20 @@ select /* TPC-DS query71.tpl 0.72 */ i_brand_id brand_id, i_brand brand,t_hour,t
    and time_sk = t_time_sk
    and (t_meal_time = &apos;breakfast&apos; or t_meal_time = &apos;dinner&apos;)
  group by i_brand, i_brand_id,t_hour,t_minute
- order by ext_price desc, i_brand_id
- ;
-
--- end template query71.tpl query 72 in stream 0
--- start template query34.tpl query 73 in stream 0
-select /* TPC-DS query34.tpl 0.73 */ c_last_name
+ order by ext_price desc, i_brand_id</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-077" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query34.tpl 0.73 */ c_last_name
        ,c_first_name
        ,c_salutation
        ,c_preferred_cust_flag
@@ -3829,11 +4534,20 @@ select /* TPC-DS query34.tpl 0.73 */ c_last_name
     group by ss_ticket_number,ss_customer_sk) dn,customer
     where ss_customer_sk = c_customer_sk
       and cnt between 15 and 20
-    order by c_last_name,c_first_name,c_salutation,c_preferred_cust_flag desc, ss_ticket_number;
-
--- end template query34.tpl query 73 in stream 0
--- start template query48.tpl query 74 in stream 0
-select /* TPC-DS query48.tpl 0.74 */ sum (ss_quantity)
+    order by c_last_name,c_first_name,c_salutation,c_preferred_cust_flag desc, ss_ticket_number</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-078" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query48.tpl 0.74 */ sum (ss_quantity)
  from store_sales, store, customer_demographics, customer_address, date_dim
  where s_store_sk = ss_store_sk
  and  ss_sold_date_sk = d_date_sk and d_year = 1999
@@ -3895,12 +4609,20 @@ select /* TPC-DS query48.tpl 0.74 */ sum (ss_quantity)
   ca_state in (&apos;SD&apos;, &apos;GA&apos;, &apos;CO&apos;)
   and ss_net_profit between 50 and 25000 
   )
- )
-;
-
--- end template query48.tpl query 74 in stream 0
--- start template query30.tpl query 75 in stream 0
-with /* TPC-DS query30.tpl 0.75 */ customer_total_return as
+ )</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-079" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query30.tpl 0.75 */ customer_total_return as
  (select wr_returning_customer_sk as ctr_customer_sk
         ,ca_state as ctr_state, 
  	sum(wr_return_amt) as ctr_total_return
@@ -3927,11 +4649,20 @@ with /* TPC-DS query30.tpl 0.75 */ customer_total_return as
  order by c_customer_id,c_salutation,c_first_name,c_last_name,c_preferred_cust_flag
                   ,c_birth_day,c_birth_month,c_birth_year,c_birth_country,c_login,c_email_address
                   ,c_last_review_date_sk,ctr_total_return
-limit 100;
-
--- end template query30.tpl query 75 in stream 0
--- start template query74.tpl query 76 in stream 0
-with /* TPC-DS query74.tpl 0.76 */ year_total as (
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-080" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query74.tpl 0.76 */ year_total as (
  select c_customer_id customer_id
        ,c_first_name customer_first_name
        ,c_last_name customer_last_name
@@ -3988,11 +4719,20 @@ with /* TPC-DS query74.tpl 0.76 */ year_total as (
          and case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else null end
            &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else null end
  order by 2,3,1
-limit 100;
-
--- end template query74.tpl query 76 in stream 0
--- start template query87.tpl query 77 in stream 0
-select /* TPC-DS query87.tpl 0.77 */ count(*) 
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-081" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query87.tpl 0.77 */ count(*) 
 from ((select distinct c_last_name, c_first_name, d_date
        from store_sales, date_dim, customer
        where store_sales.ss_sold_date_sk = date_dim.d_date_sk
@@ -4010,12 +4750,20 @@ from ((select distinct c_last_name, c_first_name, d_date
        where web_sales.ws_sold_date_sk = date_dim.d_date_sk
          and web_sales.ws_bill_customer_sk = customer.c_customer_sk
          and d_month_seq between 1217 and 1217+11)
-) cool_cust
-;
-
--- end template query87.tpl query 77 in stream 0
--- start template query77a.tpl query 78 in stream 0
-with /* TPC-DS query77a.tpl 0.78 */ ss as
+) cool_cust</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-082" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query77a.tpl 0.78 */ ss as
  (select s_store_sk,
          sum(ss_ext_sales_price) as sales,
          sum(ss_net_profit) as profit
@@ -4024,7 +4772,7 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
       store
  where ss_sold_date_sk = d_date_sk
        and d_date between cast(&apos;2000-08-02&apos; as date) 
-                  and dateadd(day,30,cast(&apos;2000-08-02&apos; as date))  
+                  and (cast(&apos;2000-08-02&apos; as date) + interval &apos;day 30&apos;)  
        and ss_store_sk = s_store_sk
  group by s_store_sk)
  ,
@@ -4037,7 +4785,7 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
       store
  where sr_returned_date_sk = d_date_sk
        and d_date between cast(&apos;2000-08-02&apos; as date)
-                  and dateadd(day,30,cast(&apos;2000-08-02&apos; as date))  
+                  and (cast(&apos;2000-08-02&apos; as date) + interval &apos;day 30&apos;)  
        and sr_store_sk = s_store_sk
  group by s_store_sk), 
  cs as
@@ -4048,7 +4796,7 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
       date_dim
  where cs_sold_date_sk = d_date_sk
        and d_date between cast(&apos;2000-08-02&apos; as date)
-                  and dateadd(day,30,cast(&apos;2000-08-02&apos; as date))  
+                  and (cast(&apos;2000-08-02&apos; as date) + interval &apos;day 30&apos;)  
  group by cs_call_center_sk 
  ), 
  cr as
@@ -4059,7 +4807,7 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
       date_dim
  where cr_returned_date_sk = d_date_sk
        and d_date between cast(&apos;2000-08-02&apos; as date)
-                  and dateadd(day,30,cast(&apos;2000-08-02&apos; as date))  
+                  and (cast(&apos;2000-08-02&apos; as date) + interval &apos;day 30&apos;)  
  group by cr_call_center_sk), 
  ws as
  ( select wp_web_page_sk,
@@ -4070,7 +4818,7 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
       web_page
  where ws_sold_date_sk = d_date_sk
        and d_date between cast(&apos;2000-08-02&apos; as date)
-                  and dateadd(day,30,cast(&apos;2000-08-02&apos; as date))  
+                  and (cast(&apos;2000-08-02&apos; as date) + interval &apos;day 30&apos;)  
        and ws_web_page_sk = wp_web_page_sk
  group by wp_web_page_sk), 
  wr as
@@ -4082,7 +4830,7 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
       web_page
  where wr_returned_date_sk = d_date_sk
        and d_date between cast(&apos;2000-08-02&apos; as date)
-                  and dateadd(day,30,cast(&apos;2000-08-02&apos; as date))  
+                  and (cast(&apos;2000-08-02&apos; as date) + interval &apos;day 30&apos;)  
        and wr_web_page_sk = wp_web_page_sk
  group by wp_web_page_sk)
  ,
@@ -4128,11 +4876,20 @@ with /* TPC-DS query77a.tpl 0.78 */ ss as
  select NULL AS channel, NULL AS id, sum(sales) as sales, sum(returns) as returns, sum(profit) as profit from  results
 ) foo
 order by channel, id
- limit 100;
-
--- end template query77a.tpl query 78 in stream 0
--- start template query73.tpl query 79 in stream 0
-select /* TPC-DS query73.tpl 0.79 */ c_last_name
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-083" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query73.tpl 0.79 */ c_last_name
        ,c_first_name
        ,c_salutation
        ,c_preferred_cust_flag 
@@ -4156,11 +4913,20 @@ select /* TPC-DS query73.tpl 0.79 */ c_last_name
     group by ss_ticket_number,ss_customer_sk) dj,customer
     where ss_customer_sk = c_customer_sk
       and cnt between 1 and 5
-    order by cnt desc, c_last_name asc;
-
--- end template query73.tpl query 79 in stream 0
--- start template query84.tpl query 80 in stream 0
-select /* TPC-DS query84.tpl 0.80 */  c_customer_id as customer_id
+    order by cnt desc, c_last_name asc</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-084" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query84.tpl 0.80 */  c_customer_id as customer_id
        , coalesce(c_last_name,&apos;&apos;) || &apos;, &apos; || coalesce(c_first_name,&apos;&apos;) as customername
  from customer
      ,customer_address
@@ -4177,11 +4943,20 @@ select /* TPC-DS query84.tpl 0.80 */  c_customer_id as customer_id
    and hd_demo_sk = c_current_hdemo_sk
    and sr_cdemo_sk = cd_demo_sk
  order by c_customer_id
- limit 100;
-
--- end template query84.tpl query 80 in stream 0
--- start template query54.tpl query 81 in stream 0
-with /* TPC-DS query54.tpl 0.81 */ my_customers as (
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-085" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query54.tpl 0.81 */ my_customers as (
  select distinct c_customer_sk
         , c_current_addr_sk
  from   
@@ -4233,11 +5008,20 @@ with /* TPC-DS query54.tpl 0.81 */ my_customers as (
  from segments
  group by segment
  order by segment, num_customers
- limit 100;
-
--- end template query54.tpl query 81 in stream 0
--- start template query55.tpl query 82 in stream 0
-select /* TPC-DS query55.tpl 0.82 */  i_brand_id brand_id, i_brand brand,
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-086" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query55.tpl 0.82 */  i_brand_id brand_id, i_brand brand,
  	sum(ss_ext_sales_price) ext_price
  from date_dim, store_sales, item
  where d_date_sk = ss_sold_date_sk
@@ -4247,11 +5031,20 @@ select /* TPC-DS query55.tpl 0.82 */  i_brand_id brand_id, i_brand brand,
  	and d_year=2002
  group by i_brand, i_brand_id
  order by ext_price desc, i_brand_id
-limit 100 ;
-
--- end template query55.tpl query 82 in stream 0
--- start template query56.tpl query 83 in stream 0
-with /* TPC-DS query56.tpl 0.83 */ ss as (
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-087" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query56.tpl 0.83 */ ss as (
  select i_item_id,sum(ss_ext_sales_price) total_sales
  from
  	store_sales,
@@ -4316,11 +5109,20 @@ where i_color in (&apos;lavender&apos;,&apos;rose&apos;,&apos;beige&apos;))
  group by i_item_id
  order by total_sales,
           i_item_id
- limit 100;
-
--- end template query56.tpl query 83 in stream 0
--- start template query2.tpl query 84 in stream 0
-with /* TPC-DS query2.tpl 0.84 */ wscs as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-088" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query2.tpl 0.84 */ wscs as
  (select sold_date_sk
         ,sales_price
   from  (select ws_sold_date_sk sold_date_sk
@@ -4329,7 +5131,7 @@ with /* TPC-DS query2.tpl 0.84 */ wscs as
         union all
         select cs_sold_date_sk sold_date_sk
               ,cs_ext_sales_price sales_price
-        from catalog_sales)),
+        from catalog_sales) as x1),
  wswscs as 
  (select d_week_seq,
         sum(case when (d_day_name=&apos;Sunday&apos;) then sales_price else null end) sun_sales,
@@ -4376,11 +5178,20 @@ with /* TPC-DS query2.tpl 0.84 */ wscs as
   where date_dim.d_week_seq = wswscs.d_week_seq and
         d_year = 2001+1) z
  where d_week_seq1=d_week_seq2-53
- order by d_week_seq1;
-
--- end template query2.tpl query 84 in stream 0
--- start template query26.tpl query 85 in stream 0
-select /* TPC-DS query26.tpl 0.85 */  i_item_id, 
+ order by d_week_seq1</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-089" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query26.tpl 0.85 */  i_item_id, 
         avg(cs_quantity) agg1,
         avg(cs_list_price) agg2,
         avg(cs_coupon_amt) agg3,
@@ -4397,11 +5208,20 @@ select /* TPC-DS query26.tpl 0.85 */  i_item_id,
        d_year = 1999 
  group by i_item_id
  order by i_item_id
- limit 100;
-
--- end template query26.tpl query 85 in stream 0
--- start template query40.tpl query 86 in stream 0
-select /* TPC-DS query40.tpl 0.86 */  
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-090" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query40.tpl 0.86 */  
    w_state
   ,i_item_id
   ,sum(case when (cast(d_date as date) &lt; cast (&apos;2001-03-21&apos; as date)) 
@@ -4420,16 +5240,25 @@ select /* TPC-DS query40.tpl 0.86 */
  and i_item_sk          = cs_item_sk
  and cs_warehouse_sk    = w_warehouse_sk 
  and cs_sold_date_sk    = d_date_sk
- and d_date between dateadd(day,-30,cast (&apos;2001-03-21&apos; as date))
-                and dateadd(day,30,cast (&apos;2001-03-21&apos; as date))
+ and d_date between (cast (&apos;2001-03-21&apos; as date) + interval &apos;day -30&apos;)
+                and (cast (&apos;2001-03-21&apos; as date) + interval &apos;day 30&apos;)
  group by
     w_state,i_item_id
  order by w_state,i_item_id
-limit 100;
-
--- end template query40.tpl query 86 in stream 0
--- start template query72.tpl query 87 in stream 0
-select /* TPC-DS query72.tpl 0.87 */  i_item_desc
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-091" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query72.tpl 0.87 */  i_item_desc
       ,w_warehouse_name
       ,d1.d_week_seq
       ,sum(case when p_promo_sk is null then 1 else 0 end) no_promo
@@ -4454,11 +5283,20 @@ where d1.d_week_seq = d2.d_week_seq
   and cd_marital_status = &apos;D&apos;
 group by i_item_desc,w_warehouse_name,d1.d_week_seq
 order by total_cnt desc, i_item_desc, w_warehouse_name, d_week_seq
-limit 100;
-
--- end template query72.tpl query 87 in stream 0
--- start template query53.tpl query 88 in stream 0
-select /* TPC-DS query53.tpl 0.88 */  * from 
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-092" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query53.tpl 0.88 */  * from 
 (select i_manufact_id,
 sum(ss_sales_price) sum_sales,
 avg(sum(ss_sales_price)) over (partition by i_manufact_id) avg_quarterly_sales
@@ -4482,34 +5320,20 @@ where case when avg_quarterly_sales &gt; 0
 order by avg_quarterly_sales,
 	 sum_sales,
 	 i_manufact_id
-limit 100;
-
--- end template query53.tpl query 88 in stream 0
--- start template query79.tpl query 89 in stream 0
-select /* TPC-DS query79.tpl 0.89 */ 
-  c_last_name,c_first_name,substring(s_city,1,30),ss_ticket_number,amt,profit
-  from
-   (select ss_ticket_number
-          ,ss_customer_sk
-          ,store.s_city
-          ,sum(ss_coupon_amt) amt
-          ,sum(ss_net_profit) profit
-    from store_sales,date_dim,store,household_demographics
-    where store_sales.ss_sold_date_sk = date_dim.d_date_sk
-    and store_sales.ss_store_sk = store.s_store_sk  
-    and store_sales.ss_hdemo_sk = household_demographics.hd_demo_sk
-    and (household_demographics.hd_dep_count = 0 or household_demographics.hd_vehicle_count &gt; 2)
-    and date_dim.d_dow = 1
-    and date_dim.d_year in (1999,1999+1,1999+2) 
-    and store.s_number_employees between 200 and 295
-    group by ss_ticket_number,ss_customer_sk,ss_addr_sk,store.s_city) ms,customer
-    where ss_customer_sk = c_customer_sk
- order by c_last_name,c_first_name,substring(s_city,1,30), profit
-limit 100;
-
--- end template query79.tpl query 89 in stream 0
--- start template query18a.tpl query 90 in stream 0
-with /* TPC-DS query18a.tpl 0.90 */ results as
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-093" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query18a.tpl 0.90 */ results as
  (select i_item_id,
         ca_country,
         ca_state, 
@@ -4561,11 +5385,20 @@ with /* TPC-DS query18a.tpl 0.90 */ results as
 	from results
  ) foo
  order by ca_country, ca_state, ca_county, i_item_id
- limit 100;
-
--- end template query18a.tpl query 90 in stream 0
--- start template query13.tpl query 91 in stream 0
-select /* TPC-DS query13.tpl 0.91 */ avg(ss_quantity)
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-094" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query13.tpl 0.91 */ avg(ss_quantity)
        ,avg(ss_ext_sales_price)
        ,avg(ss_ext_wholesale_cost)
        ,sum(ss_ext_wholesale_cost)
@@ -4612,12 +5445,20 @@ select /* TPC-DS query13.tpl 0.91 */ avg(ss_quantity)
   and ca_country = &apos;United States&apos;
   and ca_state in (&apos;OH&apos;, &apos;AL&apos;, &apos;ND&apos;)
   and ss_net_profit between 50 and 250  
-     ))
-;
-
--- end template query13.tpl query 91 in stream 0
--- start template query24.tpl query 92 in stream 0
-with /* TPC-DS query24.tpl 0.92 */ ssales as
+     ))</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-095" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query24.tpl 0.92 */ ssales as
 (select c_last_name
       ,c_first_name
       ,s_store_name
@@ -4667,9 +5508,20 @@ having sum(netpaid) &gt; (select 0.05*avg(netpaid)
                                  from ssales)
 order by c_last_name
         ,c_first_name
-        ,s_store_name
-;
-with /* TPC-DS query24.tpl 0.92 part2 */ ssales as
+        ,s_store_name</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-096" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query24.tpl 0.92 part2 */ ssales as
 (select c_last_name
       ,c_first_name
       ,s_store_name
@@ -4719,12 +5571,20 @@ having sum(netpaid) &gt; (select 0.05*avg(netpaid)
                            from ssales)
 order by c_last_name
         ,c_first_name
-        ,s_store_name
-;
-
--- end template query24.tpl query 92 in stream 0
--- start template query4.tpl query 93 in stream 0
-with /* TPC-DS query4.tpl 0.93 */ year_total as (
+        ,s_store_name</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-097" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query4.tpl 0.93 */ year_total as (
  select c_customer_id customer_id
        ,c_first_name customer_first_name
        ,c_last_name customer_last_name
@@ -4836,11 +5696,20 @@ union all
          ,t_s_secyear.customer_first_name
          ,t_s_secyear.customer_last_name
          ,t_s_secyear.customer_email_address
-limit 100;
-
--- end template query4.tpl query 93 in stream 0
--- start template query99.tpl query 94 in stream 0
-select /* TPC-DS query99.tpl 0.94 */  
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-098" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query99.tpl 0.94 */  
    substring(w_warehouse_name,1,20)
   ,sm_type
   ,cc_name
@@ -4871,11 +5740,20 @@ group by
 order by substring(w_warehouse_name,1,20)
         ,sm_type
         ,cc_name
-limit 100;
-
--- end template query99.tpl query 94 in stream 0
--- start template query68.tpl query 95 in stream 0
-select /* TPC-DS query68.tpl 0.95 */  c_last_name
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-099" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query68.tpl 0.95 */  c_last_name
        ,c_first_name
        ,ca_city
        ,bought_city
@@ -4913,11 +5791,20 @@ select /* TPC-DS query68.tpl 0.95 */  c_last_name
    and current_addr.ca_city &lt;&gt; bought_city
  order by c_last_name
          ,ss_ticket_number
- limit 100;
-
--- end template query68.tpl query 95 in stream 0
--- start template query83.tpl query 96 in stream 0
-with /* TPC-DS query83.tpl 0.96 */ sr_items as
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-100" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query83.tpl 0.96 */ sr_items as
  (select i_item_id item_id,
         sum(sr_return_quantity) sr_item_qty
  from store_returns,
@@ -4980,11 +5867,20 @@ with /* TPC-DS query83.tpl 0.96 */ sr_items as
    and sr_items.item_id=wr_items.item_id 
  order by sr_items.item_id
          ,sr_item_qty
- limit 100;
-
--- end template query83.tpl query 96 in stream 0
--- start template query61.tpl query 97 in stream 0
-select /* TPC-DS query61.tpl 0.97 */  promotions,total,cast(promotions as decimal(15,4))/cast(total as decimal(15,4))*100
+ limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-101" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query61.tpl 0.97 */  promotions,total,cast(promotions as decimal(15,4))/cast(total as decimal(15,4))*100
 from
   (select sum(ss_ext_sales_price) promotions
    from  store_sales
@@ -5024,11 +5920,20 @@ from
    and   d_year = 2000
    and   d_moy  = 11) all_sales
 order by promotions, total
-limit 100;
-
--- end template query61.tpl query 97 in stream 0
--- start template query5a.tpl query 98 in stream 0
-with /* TPC-DS query5a.tpl 0.98 */ ssr as
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-102" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query5a.tpl 0.98 */ ssr as
  (select s_store_id,
         sum(sales_price) as sales,
         sum(profit) as profit,
@@ -5159,11 +6064,20 @@ with /* TPC-DS query5a.tpl 0.98 */ ssr as
   union
   select null as channel, null as id, sum(sales), sum(returns), sum(profit) from results) foo
 order by channel, id
-limit 100;
-
--- end template query5a.tpl query 98 in stream 0
--- start template query76.tpl query 99 in stream 0
-select /* TPC-DS query76.tpl 0.99 */  channel, col_name, d_year, d_qoy, i_category, COUNT(*) sales_cnt, SUM(ext_sales_price) sales_amt FROM (
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-103" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">select /* TPC-DS query76.tpl 0.99 */  channel, col_name, d_year, d_qoy, i_category, COUNT(*) sales_cnt, SUM(ext_sales_price) sales_amt FROM (
         SELECT &apos;store&apos; as channel, &apos;ss_addr_sk&apos; col_name, d_year, d_qoy, i_category, ss_ext_sales_price ext_sales_price
          FROM store_sales, item, date_dim
          WHERE ss_addr_sk IS NULL
@@ -5183,94 +6097,127 @@ select /* TPC-DS query76.tpl 0.99 */  channel, col_name, d_year, d_qoy, i_catego
            AND cs_item_sk=i_item_sk) foo
 GROUP BY channel, col_name, d_year, d_qoy, i_category
 ORDER BY channel, col_name, d_year, d_qoy, i_category
-limit 100;
-
--- end template query76.tpl query 99 in stream 0
-</stringProp>
+limit 100</stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
           <stringProp name="variableNames"></stringProp>
           <stringProp name="resultVariable"></stringProp>
           <stringProp name="queryTimeout"></stringProp>
           <stringProp name="resultSetMaxRows"></stringProp>
-          <stringProp name="resultSetHandler">Store as String</stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
         </JDBCSampler>
-        <hashTree>
-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>false</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-                <sentBytes>true</sentBytes>
-                <url>true</url>
-                <threadCounts>true</threadCounts>
-                <idleTime>true</idleTime>
-                <connectTime>true</connectTime>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
-          <hashTree/>
-          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>false</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-                <sentBytes>true</sentBytes>
-                <url>true</url>
-                <threadCounts>true</threadCounts>
-                <idleTime>true</idleTime>
-                <connectTime>true</connectTime>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
-          <hashTree/>
-        </hashTree>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
       </hashTree>
     </hashTree>
   </hashTree>

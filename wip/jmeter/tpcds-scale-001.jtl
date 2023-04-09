@@ -1,0 +1,7 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1681048320483,1603,query-001,200,OK,TPC-DS PowerRun Thread Group 1-1,text,true,,10,0,1,1,null,1602,0,774
+1681048322088,2118,query-002,200,OK,TPC-DS PowerRun Thread Group 1-1,text,true,,8769,0,1,1,null,2111,0,0
+1681048324206,3681,query-003,200,OK,TPC-DS PowerRun Thread Group 1-1,text,true,,5253,0,1,1,null,3678,0,0
+1681048327887,414,query-004,200,OK,TPC-DS PowerRun Thread Group 1-1,text,true,,37,0,1,1,null,414,0,0
+1681048328302,10560,query-005,200,OK,TPC-DS PowerRun Thread Group 1-1,text,true,,24102,0,1,1,null,10557,0,0
+1681048338863,8582,query-006,200,OK,TPC-DS PowerRun Thread Group 1-1,text,true,,1454,0,1,1,null,8581,0,0

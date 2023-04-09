@@ -15,7 +15,7 @@ customer_address,"""create table customer_address
   ca_gmt_offset numeric(5,2) ,  
   ca_location_type char(20)     
   ,primary key (ca_address_sk)
-);"""
+)"""
 customer_demographics,"""create table customer_demographics
 (
   cd_demo_sk int4 not null ,   
@@ -28,7 +28,7 @@ customer_demographics,"""create table customer_demographics
   cd_dep_employed_count int4 ,    
   cd_dep_college_count int4       
   ,primary key (cd_demo_sk)
-);"""
+)"""
 date_dim,"""create table date_dim
 (
     d_date_sk                 integer               not null,
@@ -60,7 +60,7 @@ date_dim,"""create table date_dim
     d_current_quarter         char(1)                       ,
     d_current_year            char(1)                       ,
     primary key (d_date_sk)
-);"""
+)"""
 warehouse,"""create table warehouse
 (
     w_warehouse_sk            integer               not null,

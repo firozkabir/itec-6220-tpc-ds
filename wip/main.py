@@ -3,6 +3,7 @@ import pandas as pd
 import glob
 import psycopg2
 import os
+from datetime import datetime 
 
 
 def create_tables():
@@ -13,8 +14,8 @@ def create_tables():
 
     conn = psycopg2.connect(database=database, host=host,
                             password=password, user=username)
-    cursor = conn.cursor()
 
+    cursor = conn.cursor()    
     df = pd.read_csv("create_table.csv")
     for index, row in df.iterrows():
         drop_table = f"drop table if exists {row['table']}"
@@ -23,7 +24,8 @@ def create_tables():
         print(f"re-creating table: {row['table']}")
         cursor.execute(drop_table)
         cursor.execute(create_table)
-
+    cursor.close()
+    conn.commit()
 
 def remove_trailing_delimiter():
     files = glob.glob("./tables/*.dat")
@@ -69,9 +71,11 @@ def load_data():
 
 
 def main():
+    print(f"*** start - {datetime.now()} ***")
     # remove_trailing_delimiter()
     create_tables()
     load_data()
+    print(f"=== end - {datetime.now()} ===")
 
 
 if __name__ == '__main__':
