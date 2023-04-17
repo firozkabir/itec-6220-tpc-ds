@@ -3,7 +3,7 @@ import pandas as pd
 import glob
 import psycopg2
 import os
-from datetime import datetime 
+from datetime import datetime
 
 
 def create_tables():
@@ -15,7 +15,7 @@ def create_tables():
     conn = psycopg2.connect(database=database, host=host,
                             password=password, user=username)
 
-    cursor = conn.cursor()    
+    cursor = conn.cursor()
     df = pd.read_csv("create_table.csv")
     for index, row in df.iterrows():
         drop_table = f"drop table if exists {row['table']}"
@@ -26,6 +26,7 @@ def create_tables():
         cursor.execute(create_table)
     cursor.close()
     conn.commit()
+
 
 def remove_trailing_delimiter():
     files = glob.glob("./tables/*.dat")
@@ -70,10 +71,43 @@ def load_data():
     conn.close()
 
 
+def create_indexes():
+
+    database = os.getenv("tpcdsDatabase")
+    host = os.getenv("tpcdsHost")
+    username = os.getenv("tpcdsUsername")
+    password = os.getenv("tpcdsPassword")
+
+    conn = psycopg2.connect(database=database, host=host,
+                            password=password, user=username)
+
+    cursor = conn.cursor()
+
+    with open("index.sql") as i:
+        lines = i.readlines()
+        for line in lines:
+            sql = line.strip("\n")
+            if sql and '--' not in sql:
+                print(f"creating index: {sql}")
+                cursor.execute(sql)
+
+    conn.commit()
+    conn.close()
+
+
 def main():
     print(f"*** start - {datetime.now()} ***")
-    # remove_trailing_delimiter()
+    
+    print(f">>>>>> cleaning datafiles - {datetime.now()} <<<<<<")
+    remove_trailing_delimiter()
+    
+    print(f">>>>>> creating tables - {datetime.now()} <<<<<<")
     create_tables()
+    
+    print(f">>>>>> creating indexes - {datetime.now()} <<<<<<")
+    create_indexes()
+    
+    print(f">>>>>> loading data - {datetime.now()} <<<<<<")
     load_data()
     print(f"=== end - {datetime.now()} ===")
 

@@ -3009,96 +3009,6 @@ where r_reason_sk = 1</stringProp>
           <stringProp name="resultSetHandler">Count Records</stringProp>
         </JDBCSampler>
         <hashTree/>
-        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-052" enabled="false">
-          <stringProp name="dataSource">testVar</stringProp>
-          <stringProp name="queryType">Select Statement</stringProp>
-          <stringProp name="query">with /* TPC-DS query11.tpl 0.51 */ year_total as (
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,c_preferred_cust_flag customer_preferred_cust_flag
-       ,c_birth_country customer_birth_country
-       ,c_login customer_login
-       ,c_email_address customer_email_address
-       ,d_year dyear
-       ,sum(ss_ext_list_price-ss_ext_discount_amt) year_total
-       ,&apos;s&apos; sale_type
- from customer
-     ,store_sales
-     ,date_dim
- where c_customer_sk = ss_customer_sk
-   and ss_sold_date_sk = d_date_sk
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,c_preferred_cust_flag 
-         ,c_birth_country
-         ,c_login
-         ,c_email_address
-         ,d_year 
- union all
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,c_preferred_cust_flag customer_preferred_cust_flag
-       ,c_birth_country customer_birth_country
-       ,c_login customer_login
-       ,c_email_address customer_email_address
-       ,d_year dyear
-       ,sum(ws_ext_list_price-ws_ext_discount_amt) year_total
-       ,&apos;w&apos; sale_type
- from customer
-     ,web_sales
-     ,date_dim
- where c_customer_sk = ws_bill_customer_sk
-   and ws_sold_date_sk = d_date_sk
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,c_preferred_cust_flag 
-         ,c_birth_country
-         ,c_login
-         ,c_email_address
-         ,d_year
-         )
-  select  
-                  t_s_secyear.customer_id
-                 ,t_s_secyear.customer_first_name
-                 ,t_s_secyear.customer_last_name
-                 ,t_s_secyear.customer_email_address
- from year_total t_s_firstyear
-     ,year_total t_s_secyear
-     ,year_total t_w_firstyear
-     ,year_total t_w_secyear
- where t_s_secyear.customer_id = t_s_firstyear.customer_id
-         and t_s_firstyear.customer_id = t_w_secyear.customer_id
-         and t_s_firstyear.customer_id = t_w_firstyear.customer_id
-         and t_s_firstyear.sale_type = &apos;s&apos;
-         and t_w_firstyear.sale_type = &apos;w&apos;
-         and t_s_secyear.sale_type = &apos;s&apos;
-         and t_w_secyear.sale_type = &apos;w&apos;
-         and t_s_firstyear.dyear = 1998
-         and t_s_secyear.dyear = 1998+1
-         and t_w_firstyear.dyear = 1998
-         and t_w_secyear.dyear = 1998+1
-         and t_s_firstyear.year_total &gt; 0
-         and t_w_firstyear.year_total &gt; 0
-         and case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else 0.0 end
-             &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else 0.0 end
- order by t_s_secyear.customer_id
-         ,t_s_secyear.customer_first_name
-         ,t_s_secyear.customer_last_name
-         ,t_s_secyear.customer_email_address
-limit 100</stringProp>
-          <stringProp name="queryArguments"></stringProp>
-          <stringProp name="queryArgumentsTypes"></stringProp>
-          <stringProp name="variableNames"></stringProp>
-          <stringProp name="resultVariable"></stringProp>
-          <stringProp name="queryTimeout"></stringProp>
-          <stringProp name="resultSetMaxRows"></stringProp>
-          <stringProp name="resultSetHandler">Count Records</stringProp>
-        </JDBCSampler>
-        <hashTree/>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-053" enabled="true">
           <stringProp name="dataSource">testVar</stringProp>
           <stringProp name="queryType">Select Statement</stringProp>
@@ -4659,76 +4569,6 @@ limit 100</stringProp>
           <stringProp name="resultSetHandler">Count Records</stringProp>
         </JDBCSampler>
         <hashTree/>
-        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-080" enabled="true">
-          <stringProp name="dataSource">testVar</stringProp>
-          <stringProp name="queryType">Select Statement</stringProp>
-          <stringProp name="query">with /* TPC-DS query74.tpl 0.76 */ year_total as (
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,d_year as year
-       ,max(ss_net_paid) year_total
-       ,&apos;s&apos; sale_type
- from customer
-     ,store_sales
-     ,date_dim
- where c_customer_sk = ss_customer_sk
-   and ss_sold_date_sk = d_date_sk
-   and d_year in (1998,1998+1)
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,d_year
- union all
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,d_year as year
-       ,max(ws_net_paid) year_total
-       ,&apos;w&apos; sale_type
- from customer
-     ,web_sales
-     ,date_dim
- where c_customer_sk = ws_bill_customer_sk
-   and ws_sold_date_sk = d_date_sk
-   and d_year in (1998,1998+1)
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,d_year
-         )
-  select 
-        t_s_secyear.customer_id, t_s_secyear.customer_first_name, t_s_secyear.customer_last_name
- from year_total t_s_firstyear
-     ,year_total t_s_secyear
-     ,year_total t_w_firstyear
-     ,year_total t_w_secyear
- where t_s_secyear.customer_id = t_s_firstyear.customer_id
-         and t_s_firstyear.customer_id = t_w_secyear.customer_id
-         and t_s_firstyear.customer_id = t_w_firstyear.customer_id
-         and t_s_firstyear.sale_type = &apos;s&apos;
-         and t_w_firstyear.sale_type = &apos;w&apos;
-         and t_s_secyear.sale_type = &apos;s&apos;
-         and t_w_secyear.sale_type = &apos;w&apos;
-         and t_s_firstyear.year = 1998
-         and t_s_secyear.year = 1998+1
-         and t_w_firstyear.year = 1998
-         and t_w_secyear.year = 1998+1
-         and t_s_firstyear.year_total &gt; 0
-         and t_w_firstyear.year_total &gt; 0
-         and case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else null end
-           &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else null end
- order by 2,3,1
-limit 100</stringProp>
-          <stringProp name="queryArguments"></stringProp>
-          <stringProp name="queryArgumentsTypes"></stringProp>
-          <stringProp name="variableNames"></stringProp>
-          <stringProp name="resultVariable"></stringProp>
-          <stringProp name="queryTimeout"></stringProp>
-          <stringProp name="resultSetMaxRows"></stringProp>
-          <stringProp name="resultSetHandler">Count Records</stringProp>
-        </JDBCSampler>
-        <hashTree/>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-081" enabled="true">
           <stringProp name="dataSource">testVar</stringProp>
           <stringProp name="queryType">Select Statement</stringProp>
@@ -5581,131 +5421,6 @@ order by c_last_name
           <stringProp name="resultSetHandler">Count Records</stringProp>
         </JDBCSampler>
         <hashTree/>
-        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-097" enabled="true">
-          <stringProp name="dataSource">testVar</stringProp>
-          <stringProp name="queryType">Select Statement</stringProp>
-          <stringProp name="query">with /* TPC-DS query4.tpl 0.93 */ year_total as (
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,c_preferred_cust_flag customer_preferred_cust_flag
-       ,c_birth_country customer_birth_country
-       ,c_login customer_login
-       ,c_email_address customer_email_address
-       ,d_year dyear
-       ,sum(((ss_ext_list_price-ss_ext_wholesale_cost-ss_ext_discount_amt)+ss_ext_sales_price)/2) year_total
-       ,&apos;s&apos; sale_type
- from customer
-     ,store_sales
-     ,date_dim
- where c_customer_sk = ss_customer_sk
-   and ss_sold_date_sk = d_date_sk
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,c_preferred_cust_flag
-         ,c_birth_country
-         ,c_login
-         ,c_email_address
-         ,d_year
- union all
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,c_preferred_cust_flag customer_preferred_cust_flag
-       ,c_birth_country customer_birth_country
-       ,c_login customer_login
-       ,c_email_address customer_email_address
-       ,d_year dyear
-       ,sum((((cs_ext_list_price-cs_ext_wholesale_cost-cs_ext_discount_amt)+cs_ext_sales_price)/2) ) year_total
-       ,&apos;c&apos; sale_type
- from customer
-     ,catalog_sales
-     ,date_dim
- where c_customer_sk = cs_bill_customer_sk
-   and cs_sold_date_sk = d_date_sk
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,c_preferred_cust_flag
-         ,c_birth_country
-         ,c_login
-         ,c_email_address
-         ,d_year
-union all
- select c_customer_id customer_id
-       ,c_first_name customer_first_name
-       ,c_last_name customer_last_name
-       ,c_preferred_cust_flag customer_preferred_cust_flag
-       ,c_birth_country customer_birth_country
-       ,c_login customer_login
-       ,c_email_address customer_email_address
-       ,d_year dyear
-       ,sum((((ws_ext_list_price-ws_ext_wholesale_cost-ws_ext_discount_amt)+ws_ext_sales_price)/2) ) year_total
-       ,&apos;w&apos; sale_type
- from customer
-     ,web_sales
-     ,date_dim
- where c_customer_sk = ws_bill_customer_sk
-   and ws_sold_date_sk = d_date_sk
- group by c_customer_id
-         ,c_first_name
-         ,c_last_name
-         ,c_preferred_cust_flag
-         ,c_birth_country
-         ,c_login
-         ,c_email_address
-         ,d_year
-         )
-  select  
-                  t_s_secyear.customer_id
-                 ,t_s_secyear.customer_first_name
-                 ,t_s_secyear.customer_last_name
-                 ,t_s_secyear.customer_email_address
- from year_total t_s_firstyear
-     ,year_total t_s_secyear
-     ,year_total t_c_firstyear
-     ,year_total t_c_secyear
-     ,year_total t_w_firstyear
-     ,year_total t_w_secyear
- where t_s_secyear.customer_id = t_s_firstyear.customer_id
-   and t_s_firstyear.customer_id = t_c_secyear.customer_id
-   and t_s_firstyear.customer_id = t_c_firstyear.customer_id
-   and t_s_firstyear.customer_id = t_w_firstyear.customer_id
-   and t_s_firstyear.customer_id = t_w_secyear.customer_id
-   and t_s_firstyear.sale_type = &apos;s&apos;
-   and t_c_firstyear.sale_type = &apos;c&apos;
-   and t_w_firstyear.sale_type = &apos;w&apos;
-   and t_s_secyear.sale_type = &apos;s&apos;
-   and t_c_secyear.sale_type = &apos;c&apos;
-   and t_w_secyear.sale_type = &apos;w&apos;
-   and t_s_firstyear.dyear =  1998
-   and t_s_secyear.dyear = 1998+1
-   and t_c_firstyear.dyear =  1998
-   and t_c_secyear.dyear =  1998+1
-   and t_w_firstyear.dyear = 1998
-   and t_w_secyear.dyear = 1998+1
-   and t_s_firstyear.year_total &gt; 0
-   and t_c_firstyear.year_total &gt; 0
-   and t_w_firstyear.year_total &gt; 0
-   and case when t_c_firstyear.year_total &gt; 0 then t_c_secyear.year_total / t_c_firstyear.year_total else null end
-           &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else null end
-   and case when t_c_firstyear.year_total &gt; 0 then t_c_secyear.year_total / t_c_firstyear.year_total else null end
-           &gt; case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else null end
- order by t_s_secyear.customer_id
-         ,t_s_secyear.customer_first_name
-         ,t_s_secyear.customer_last_name
-         ,t_s_secyear.customer_email_address
-limit 100</stringProp>
-          <stringProp name="queryArguments"></stringProp>
-          <stringProp name="queryArgumentsTypes"></stringProp>
-          <stringProp name="variableNames"></stringProp>
-          <stringProp name="resultVariable"></stringProp>
-          <stringProp name="queryTimeout"></stringProp>
-          <stringProp name="resultSetMaxRows"></stringProp>
-          <stringProp name="resultSetHandler">Count Records</stringProp>
-        </JDBCSampler>
-        <hashTree/>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="query-098" enabled="true">
           <stringProp name="dataSource">testVar</stringProp>
           <stringProp name="queryType">Select Statement</stringProp>
@@ -5960,7 +5675,7 @@ limit 100</stringProp>
      store
  where date_sk = d_date_sk
        and d_date between cast(&apos;1998-08-11&apos; as date) 
-                  and dateadd(day,14,cast(&apos;1998-08-11&apos; as date))
+                  and (cast(&apos;1998-08-11&apos; as date) + interval &apos;day 30&apos;)
        and store_sk = s_store_sk
  group by s_store_id)
  ,
@@ -5991,7 +5706,7 @@ limit 100</stringProp>
      catalog_page
  where date_sk = d_date_sk
        and d_date between cast(&apos;1998-08-11&apos; as date)
-                  and dateadd(day,14,cast(&apos;1998-08-11&apos; as date))
+                  and (cast(&apos;1998-08-11&apos; as date) + interval &apos;day 14&apos;)
        and page_sk = cp_catalog_page_sk
  group by cp_catalog_page_id)
  ,
@@ -6024,7 +5739,7 @@ limit 100</stringProp>
      web_site
  where date_sk = d_date_sk
        and d_date between cast(&apos;1998-08-11&apos; as date)
-                  and dateadd(day,14,cast(&apos;1998-08-11&apos; as date))
+                  and (cast(&apos;1998-08-11&apos; as date) + interval &apos;day 14&apos;)
        and wsr_web_site_sk = web_site_sk
  group by web_site_id)
  ,
@@ -6097,6 +5812,291 @@ limit 100</stringProp>
            AND cs_item_sk=i_item_sk) foo
 GROUP BY channel, col_name, d_year, d_qoy, i_category
 ORDER BY channel, col_name, d_year, d_qoy, i_category
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="zzz-outlier-query-052" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query11.tpl 0.51 */ year_total as (
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,c_preferred_cust_flag customer_preferred_cust_flag
+       ,c_birth_country customer_birth_country
+       ,c_login customer_login
+       ,c_email_address customer_email_address
+       ,d_year dyear
+       ,sum(ss_ext_list_price-ss_ext_discount_amt) year_total
+       ,&apos;s&apos; sale_type
+ from customer
+     ,store_sales
+     ,date_dim
+ where c_customer_sk = ss_customer_sk
+   and ss_sold_date_sk = d_date_sk
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,c_preferred_cust_flag 
+         ,c_birth_country
+         ,c_login
+         ,c_email_address
+         ,d_year 
+ union all
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,c_preferred_cust_flag customer_preferred_cust_flag
+       ,c_birth_country customer_birth_country
+       ,c_login customer_login
+       ,c_email_address customer_email_address
+       ,d_year dyear
+       ,sum(ws_ext_list_price-ws_ext_discount_amt) year_total
+       ,&apos;w&apos; sale_type
+ from customer
+     ,web_sales
+     ,date_dim
+ where c_customer_sk = ws_bill_customer_sk
+   and ws_sold_date_sk = d_date_sk
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,c_preferred_cust_flag 
+         ,c_birth_country
+         ,c_login
+         ,c_email_address
+         ,d_year
+         )
+  select  
+                  t_s_secyear.customer_id
+                 ,t_s_secyear.customer_first_name
+                 ,t_s_secyear.customer_last_name
+                 ,t_s_secyear.customer_email_address
+ from year_total t_s_firstyear
+     ,year_total t_s_secyear
+     ,year_total t_w_firstyear
+     ,year_total t_w_secyear
+ where t_s_secyear.customer_id = t_s_firstyear.customer_id
+         and t_s_firstyear.customer_id = t_w_secyear.customer_id
+         and t_s_firstyear.customer_id = t_w_firstyear.customer_id
+         and t_s_firstyear.sale_type = &apos;s&apos;
+         and t_w_firstyear.sale_type = &apos;w&apos;
+         and t_s_secyear.sale_type = &apos;s&apos;
+         and t_w_secyear.sale_type = &apos;w&apos;
+         and t_s_firstyear.dyear = 1998
+         and t_s_secyear.dyear = 1998+1
+         and t_w_firstyear.dyear = 1998
+         and t_w_secyear.dyear = 1998+1
+         and t_s_firstyear.year_total &gt; 0
+         and t_w_firstyear.year_total &gt; 0
+         and case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else 0.0 end
+             &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else 0.0 end
+ order by t_s_secyear.customer_id
+         ,t_s_secyear.customer_first_name
+         ,t_s_secyear.customer_last_name
+         ,t_s_secyear.customer_email_address
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="zzz-outlier-query-080" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query74.tpl 0.76 */ year_total as (
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,d_year as year
+       ,max(ss_net_paid) year_total
+       ,&apos;s&apos; sale_type
+ from customer
+     ,store_sales
+     ,date_dim
+ where c_customer_sk = ss_customer_sk
+   and ss_sold_date_sk = d_date_sk
+   and d_year in (1998,1998+1)
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,d_year
+ union all
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,d_year as year
+       ,max(ws_net_paid) year_total
+       ,&apos;w&apos; sale_type
+ from customer
+     ,web_sales
+     ,date_dim
+ where c_customer_sk = ws_bill_customer_sk
+   and ws_sold_date_sk = d_date_sk
+   and d_year in (1998,1998+1)
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,d_year
+         )
+  select 
+        t_s_secyear.customer_id, t_s_secyear.customer_first_name, t_s_secyear.customer_last_name
+ from year_total t_s_firstyear
+     ,year_total t_s_secyear
+     ,year_total t_w_firstyear
+     ,year_total t_w_secyear
+ where t_s_secyear.customer_id = t_s_firstyear.customer_id
+         and t_s_firstyear.customer_id = t_w_secyear.customer_id
+         and t_s_firstyear.customer_id = t_w_firstyear.customer_id
+         and t_s_firstyear.sale_type = &apos;s&apos;
+         and t_w_firstyear.sale_type = &apos;w&apos;
+         and t_s_secyear.sale_type = &apos;s&apos;
+         and t_w_secyear.sale_type = &apos;w&apos;
+         and t_s_firstyear.year = 1998
+         and t_s_secyear.year = 1998+1
+         and t_w_firstyear.year = 1998
+         and t_w_secyear.year = 1998+1
+         and t_s_firstyear.year_total &gt; 0
+         and t_w_firstyear.year_total &gt; 0
+         and case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else null end
+           &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else null end
+ order by 2,3,1
+limit 100</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultSetHandler">Count Records</stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="zzz-outlier-query-097" enabled="true">
+          <stringProp name="dataSource">testVar</stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="query">with /* TPC-DS query4.tpl 0.93 */ year_total as (
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,c_preferred_cust_flag customer_preferred_cust_flag
+       ,c_birth_country customer_birth_country
+       ,c_login customer_login
+       ,c_email_address customer_email_address
+       ,d_year dyear
+       ,sum(((ss_ext_list_price-ss_ext_wholesale_cost-ss_ext_discount_amt)+ss_ext_sales_price)/2) year_total
+       ,&apos;s&apos; sale_type
+ from customer
+     ,store_sales
+     ,date_dim
+ where c_customer_sk = ss_customer_sk
+   and ss_sold_date_sk = d_date_sk
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,c_preferred_cust_flag
+         ,c_birth_country
+         ,c_login
+         ,c_email_address
+         ,d_year
+ union all
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,c_preferred_cust_flag customer_preferred_cust_flag
+       ,c_birth_country customer_birth_country
+       ,c_login customer_login
+       ,c_email_address customer_email_address
+       ,d_year dyear
+       ,sum((((cs_ext_list_price-cs_ext_wholesale_cost-cs_ext_discount_amt)+cs_ext_sales_price)/2) ) year_total
+       ,&apos;c&apos; sale_type
+ from customer
+     ,catalog_sales
+     ,date_dim
+ where c_customer_sk = cs_bill_customer_sk
+   and cs_sold_date_sk = d_date_sk
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,c_preferred_cust_flag
+         ,c_birth_country
+         ,c_login
+         ,c_email_address
+         ,d_year
+union all
+ select c_customer_id customer_id
+       ,c_first_name customer_first_name
+       ,c_last_name customer_last_name
+       ,c_preferred_cust_flag customer_preferred_cust_flag
+       ,c_birth_country customer_birth_country
+       ,c_login customer_login
+       ,c_email_address customer_email_address
+       ,d_year dyear
+       ,sum((((ws_ext_list_price-ws_ext_wholesale_cost-ws_ext_discount_amt)+ws_ext_sales_price)/2) ) year_total
+       ,&apos;w&apos; sale_type
+ from customer
+     ,web_sales
+     ,date_dim
+ where c_customer_sk = ws_bill_customer_sk
+   and ws_sold_date_sk = d_date_sk
+ group by c_customer_id
+         ,c_first_name
+         ,c_last_name
+         ,c_preferred_cust_flag
+         ,c_birth_country
+         ,c_login
+         ,c_email_address
+         ,d_year
+         )
+  select  
+                  t_s_secyear.customer_id
+                 ,t_s_secyear.customer_first_name
+                 ,t_s_secyear.customer_last_name
+                 ,t_s_secyear.customer_email_address
+ from year_total t_s_firstyear
+     ,year_total t_s_secyear
+     ,year_total t_c_firstyear
+     ,year_total t_c_secyear
+     ,year_total t_w_firstyear
+     ,year_total t_w_secyear
+ where t_s_secyear.customer_id = t_s_firstyear.customer_id
+   and t_s_firstyear.customer_id = t_c_secyear.customer_id
+   and t_s_firstyear.customer_id = t_c_firstyear.customer_id
+   and t_s_firstyear.customer_id = t_w_firstyear.customer_id
+   and t_s_firstyear.customer_id = t_w_secyear.customer_id
+   and t_s_firstyear.sale_type = &apos;s&apos;
+   and t_c_firstyear.sale_type = &apos;c&apos;
+   and t_w_firstyear.sale_type = &apos;w&apos;
+   and t_s_secyear.sale_type = &apos;s&apos;
+   and t_c_secyear.sale_type = &apos;c&apos;
+   and t_w_secyear.sale_type = &apos;w&apos;
+   and t_s_firstyear.dyear =  1998
+   and t_s_secyear.dyear = 1998+1
+   and t_c_firstyear.dyear =  1998
+   and t_c_secyear.dyear =  1998+1
+   and t_w_firstyear.dyear = 1998
+   and t_w_secyear.dyear = 1998+1
+   and t_s_firstyear.year_total &gt; 0
+   and t_c_firstyear.year_total &gt; 0
+   and t_w_firstyear.year_total &gt; 0
+   and case when t_c_firstyear.year_total &gt; 0 then t_c_secyear.year_total / t_c_firstyear.year_total else null end
+           &gt; case when t_s_firstyear.year_total &gt; 0 then t_s_secyear.year_total / t_s_firstyear.year_total else null end
+   and case when t_c_firstyear.year_total &gt; 0 then t_c_secyear.year_total / t_c_firstyear.year_total else null end
+           &gt; case when t_w_firstyear.year_total &gt; 0 then t_w_secyear.year_total / t_w_firstyear.year_total else null end
+ order by t_s_secyear.customer_id
+         ,t_s_secyear.customer_first_name
+         ,t_s_secyear.customer_last_name
+         ,t_s_secyear.customer_email_address
 limit 100</stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
@@ -6182,6 +6182,117 @@ limit 100</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
