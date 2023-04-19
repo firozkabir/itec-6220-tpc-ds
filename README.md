@@ -1,14 +1,11 @@
-# itec-6220-tpc-ds
-A course project comparing tpc-ds benchmarks against various cloud managed databases
-
 ## About This Repository
 This repository was created to host all the code written for a class project for ITEC-6220. 
 
 ## What is in this repository
-* 
+* a python script to create tables, load / reload genereated data from tpc-ds toolkit
+* a jmeter test to run the tpc-ds benchmark
+* test results from our expeirments run as part of course project
 
-## data model
-* we will add data model here
 
 ## What is not in this repository
 * TPC-DS toolkits are not in this repository
