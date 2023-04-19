@@ -96,6 +96,7 @@ def create_indexes():
 
 
 def main():
+
     print(f"*** start - {datetime.now()} ***")
     
     print(f">>>>>> cleaning datafiles - {datetime.now()} <<<<<<")

@@ -6,6 +6,29 @@ This repository was created to host all the code written for a class project for
 * a jmeter test to run the tpc-ds benchmark
 * test results from our expeirments run as part of course project
 
+## How to run locally 
+
+* Environment variable setup 
+    - both the python script and the jmeter tests depend on a few environment variables
+    - these environment variables area used to provide these scripts the database credentials they need to do their work
+    - set `tpcdsHost` to the database host
+    - set `tpcdsUsername` to the database username
+    - set `tpcdsPassword` to the database password
+    - set `tpcdsDatabase` to the name of the database on the server you'd like to use
+    - don't forget to source the .bashrc file after setting up these variables
+
+* Python virtual environment setup 
+    - run `virtualenv -p /usr/bin/python3 .venv` to create a virtual environment
+    - activate the environment by runnig `source .venv/bin/activate`
+    - now, install the dependencies by running `pip3 install -r requirements.txt`
+
+* Test data setup
+    - expects data to be present in a directory tables/
+    - we zipped all the data along with the tables/ directory in tables.zip file and added large-file-storage in github.com
+    - to work with this data, please unzip the file before you run the python script
+    - please note, that this was randomy generated 1GB scale data created using `dsdgen`
+    - see below for more about `dsdgen` and `dsqgen`
+
 
 ## What is not in this repository
 * TPC-DS toolkits are not in this repository
