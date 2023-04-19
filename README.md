@@ -2,6 +2,9 @@
 This repository was created to host all the code written for a class project for ITEC-6220. 
 
 ## What is in this repository
+* 
+
+## data model
 
 ## What is not in this repository
 * TPC-DS toolkits are not in this repository
@@ -35,4 +38,5 @@ dsqgen \
 ```bash
 dsdgen -scale 1 -dir ~/tables
 ```
+
 
