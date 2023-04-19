@@ -5,6 +5,7 @@ This repository was created to host all the code written for a class project for
 * 
 
 ## data model
+* we will add data model here
 
 ## What is not in this repository
 * TPC-DS toolkits are not in this repository
